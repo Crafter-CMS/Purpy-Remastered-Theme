@@ -1,0 +1,485 @@
+<!-- ============================================================
+     STORE > PRODUCT DETAIL (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/store" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+      </svg>
+      <span>Mağaza</span>
+    </a>
+    {% if server %}
+      <span class="text-gray-500">/</span>
+      <a href="/store/{{ server.slug }}" class="hover:text-primary transition-colors" style="color: #cbd5e1;">
+        {{ server.name }}
+      </a>
+    {% endif %}
+    {% if category %}
+      <span class="text-gray-500">/</span>
+      <a href="/store/{{ server.slug }}/{{ category.slug }}" class="hover:text-primary transition-colors" style="color: #cbd5e1;">
+        {{ category.name }}
+      </a>
+    {% endif %}
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">{{ product.name }}</span>
+  </div>
+
+  <!-- Üst Ana Kart (Görsel + Bilgiler) -->
+  <div
+    class="rounded-3xl p-6 sm:p-10 border-2 shadow-2xl relative overflow-hidden"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    "
+  >
+    <!-- Background Ambient Glow -->
+    <div
+      class="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none"
+      style="background: radial-gradient(circle, var(--color-primary), transparent 70%);"
+    ></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+      <!-- SOL SÜTUN: Ürün Görseli & Galeri (5 Cols) -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        <!-- Main Image Container -->
+        <div
+          class="relative w-full aspect-square rounded-2xl p-8 flex items-center justify-center border-2 overflow-hidden group shadow-inner"
+          style="
+            background: linear-gradient(135deg, rgba(14, 9, 20, 0.9), rgba(20, 12, 28, 0.9));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+          "
+        >
+          <!-- Center Purple Aura -->
+          <div
+            class="absolute inset-0 rounded-full blur-3xl opacity-35 pointer-events-none group-hover:opacity-60 transition-opacity duration-700"
+            style="background: radial-gradient(circle, var(--color-primary), transparent 65%);"
+          ></div>
+
+          {% if product.discountValue and product.discountValue > 0 %}
+            <div class="absolute top-4 left-4 z-10">
+              <span class="px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-lg bg-rose-600 border border-rose-400/30">
+                -{{ product.discountValue }}{% if product.discountType == 'percentage' %}%{% else %} ₺{% endif %} İNDİRİM
+              </span>
+            </div>
+          {% endif %}
+
+          {% if product.images and product.images.size > 0 %}
+            <img
+              id="mainProductImage"
+              src="{{ product.images[0] }}"
+              alt="{{ product.name }}"
+              class="w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 ease-out"
+            >
+          {% elsif product.image != blank %}
+            <img
+              id="mainProductImage"
+              src="{{ product.image }}"
+              alt="{{ product.name }}"
+              class="w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 ease-out"
+            >
+          {% else %}
+            <svg class="w-32 h-32 text-primary/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          {% endif %}
+        </div>
+
+        <!-- Thumbnails Gallery (if multiple) -->
+        {% if product.images and product.images.size > 1 %}
+          <div class="flex gap-3 overflow-x-auto pb-2">
+            {% for img in product.images %}
+              <button
+                type="button"
+                onclick="document.getElementById('mainProductImage').src = '{{ img }}'"
+                class="w-18 h-18 rounded-xl p-2 border-2 cursor-pointer transition-all hover:scale-105 hover:border-primary flex items-center justify-center flex-shrink-0"
+                style="background: rgba(14, 9, 20, 0.8); border-color: rgba(255, 255, 255, 0.1);"
+              >
+                <img src="{{ img }}" alt="Thumbnail" class="w-full h-full object-contain">
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- SAĞ SÜTUN: Ürün Başlığı, Fiyat ve Satın Alma (7 Cols) -->
+      <div class="lg:col-span-7 flex flex-col justify-center space-y-6">
+        <!-- Kategori Rozeti & Başlık -->
+        <div>
+          {% if category %}
+            <div class="mb-2">
+              <a
+                href="/store/{{ server.slug }}/{{ category.slug }}"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border backdrop-blur-sm transition-all hover:scale-105"
+                style="
+                  background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+                  border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+                  color: var(--color-primary);
+                "
+              >
+                <span>{{ category.name }}</span>
+                <span>→</span>
+              </a>
+            </div>
+          {% endif %}
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight mb-4" style="color: #ffffff !important;">
+            {{ product.name }}
+          </h1>
+
+          <!-- Stok & Etiket Rozetleri -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Stok Durumu -->
+            {% if product.stock != null and product.stock == 0 %}
+              <span class="px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                Stokta Yok
+              </span>
+            {% elsif product.stock and product.stock > 0 and product.stock <= 10 %}
+              <span class="px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1.5 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                Son {{ product.stock }} Adet!
+              </span>
+            {% else %}
+              <span class="px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Sınırsız Stok
+              </span>
+            {% endif %}
+
+            {% if product.isFeatured %}
+              <span class="px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-md"
+                    style="background: linear-gradient(135deg, var(--color-primary), #9333ea);">
+                ÖNE ÇIKAN
+              </span>
+            {% endif %}
+
+            {% if product.tags and product.tags.size > 0 %}
+              {% for tag in product.tags %}
+                <span class="px-3 py-1 rounded-xl text-xs font-bold border"
+                      style="background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.12); color: #cbd5e1;">
+                  #{{ tag }}
+                </span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Fiyat & Miktar & Aksiyon Kutusu -->
+        {% assign unit_price = product.price %}
+        {% assign has_discount = false %}
+        {% if product.discountValue and product.discountValue > 0 %}
+          {% assign has_discount = true %}
+          {% if product.discountType == 'percentage' %}
+            {% assign discount_amount = product.price | times: product.discountValue | divided_by: 100 %}
+            {% assign unit_price = product.price | minus: discount_amount %}
+          {% else %}
+            {% assign unit_price = product.price | minus: product.discountValue %}
+          {% endif %}
+        {% endif %}
+
+        <div
+          class="rounded-2xl p-6 sm:p-8 border-2 shadow-xl space-y-6"
+          style="
+            background: linear-gradient(135deg, rgba(14, 9, 20, 0.95), rgba(20, 12, 28, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+          "
+        >
+          <!-- Fiyat Bölümü -->
+          <div class="flex items-center justify-between gap-4 flex-wrap pb-4 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+            <div>
+              <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Birim Fiyatı</span>
+              <div class="flex items-center gap-3">
+                {% if has_discount %}
+                  <div class="text-xl font-bold text-gray-500 line-through">{{ product.price }} ₺</div>
+                  <div class="text-3xl sm:text-4xl font-black" style="color: var(--color-primary);">{{ unit_price }} ₺</div>
+                {% else %}
+                  <div class="text-3xl sm:text-4xl font-black" style="color: var(--color-primary);">{{ product.price }} ₺</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Miktar Seçici -->
+            <div>
+              <span class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Miktar</span>
+              <div
+                class="flex items-center rounded-xl border-2 p-1"
+                style="background: rgba(26, 16, 32, 0.9); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.3);"
+              >
+                <button
+                  type="button"
+                  onclick="decreaseQuantity()"
+                  class="w-9 h-9 rounded-lg flex items-center justify-center text-white hover:bg-white/10 transition-colors font-black text-lg cursor-pointer"
+                >
+                  -
+                </button>
+                <span id="quantity-display" class="w-10 text-center font-black text-base text-white">1</span>
+                <button
+                  type="button"
+                  onclick="increaseQuantity()"
+                  class="w-9 h-9 rounded-lg flex items-center justify-center text-white hover:bg-white/10 transition-colors font-black text-lg cursor-pointer"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toplam Tutar ve Satın Alma Butonları -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-base sm:text-lg font-bold">
+              <span class="text-gray-300">Ödenecek Toplam Tutar:</span>
+              <span id="total-price-display" class="text-2xl sm:text-3xl font-black" style="color: var(--color-primary);">
+                {{ unit_price }} ₺
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <!-- Sepete Ekle Butonu -->
+              <button
+                type="button"
+                onclick="handleAddToCart()"
+                {% if product.stock != null and product.stock == 0 %}disabled{% endif %}
+                class="w-full py-4 px-6 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 border transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                style="
+                  background: rgba(255, 255, 255, 0.08);
+                  border-color: rgba(255, 255, 255, 0.15);
+                  color: #ffffff;
+                "
+              >
+                <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span>Sepete Ekle</span>
+              </button>
+
+              <!-- Hemen Satın Al Butonu -->
+              <button
+                type="button"
+                onclick="openBuyModal('{{ product.id }}', '{{ product.name | escape }}', '{{ unit_price }}', '{{ product.image }}')"
+                {% if product.stock != null and product.stock == 0 %}disabled{% endif %}
+                class="w-full py-4 px-6 rounded-xl font-black text-xs sm:text-sm text-white uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <span>Hemen Satın Al</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Güvenlik & Teslimat Rozetleri -->
+          <div class="flex items-center justify-center gap-6 text-xs font-bold text-gray-400 pt-2 border-t" style="border-color: rgba(255, 255, 255, 0.06);">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Anında Teslimat</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <span>Güvenli Ödeme</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <span>7/24 Aktif</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ürün Açıklaması (Alt Tam Genişlik Kartı) -->
+  <div
+    class="rounded-3xl p-6 sm:p-10 border-2 shadow-2xl"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    "
+  >
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+           style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border: 1px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--color-primary);">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wide text-white" style="color: #ffffff !important;">
+        Ürün Açıklaması & Detayları
+      </h2>
+    </div>
+
+    <!-- Lexical Rich Content / Markdown -->
+    <div
+      class="prose prose-invert max-w-none text-sm sm:text-base leading-relaxed"
+      style="color: #cbd5e1 !important;"
+    >
+      {{ product.description | lexical_html | default: product.description | default: '<p class="text-gray-400 italic">Bu ürün için henüz detaylı bir açıklama girilmemiş.</p>' }}
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BUY NOW CONFIRMATION MODAL
+     ============================================================ -->
+<div id="buy-now-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden backdrop-blur-md" style="background: rgba(0, 0, 0, 0.75);">
+  <div class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border-2 overflow-hidden animate-in fade-in zoom-in duration-300"
+       style="background: linear-gradient(135deg, #1a1020, #140c1c); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-black uppercase text-white" style="color: #ffffff !important;">Hemen Satın Al</h3>
+      <button onclick="closeBuyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors cursor-pointer"
+              style="background: rgba(255, 255, 255, 0.08);">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <p class="text-xs text-gray-300 mb-5">Bu ürünü mevcut bakiyenizle hemen satın almak istediğinize emin misiniz?</p>
+
+    <!-- Product Summary Card -->
+    <div class="flex items-center gap-4 p-4 rounded-2xl mb-4 border"
+         style="background: rgba(14, 9, 20, 0.7); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);">
+      <img id="modal-product-img" src="" alt="" class="w-14 h-14 object-contain rounded-xl">
+      <div class="flex-1 min-w-0">
+        <h4 id="modal-product-name" class="font-bold text-white truncate text-sm" style="color: #ffffff !important;"></h4>
+        <p class="text-xs text-gray-400">Adet: <span id="modal-product-qty">1</span></p>
+      </div>
+      <div class="text-right">
+        <span id="modal-product-price" class="font-black text-lg" style="color: var(--color-primary);"></span>
+      </div>
+    </div>
+
+    <!-- User Balance Summary -->
+    <div class="p-4 rounded-2xl mb-6 border flex items-center justify-between"
+         style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.10); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        <span class="text-xs text-gray-300 font-semibold">Mevcut Bakiyeniz:</span>
+      </div>
+      <span class="font-black text-base text-emerald-400">₺{{ customer.balance | default: customer.credit | default: 0 }}</span>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="flex items-center gap-3">
+      <button onclick="closeBuyModal()" class="flex-1 py-3 rounded-xl font-bold text-xs text-gray-300 hover:text-white border transition-colors cursor-pointer"
+              style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1);">
+        Vazgeç
+      </button>
+      <button id="modal-confirm-btn" onclick="confirmDirectPurchase()" class="flex-1 py-3 rounded-xl font-black text-xs text-white uppercase tracking-wider shadow-lg transition-all hover:scale-105 cursor-pointer"
+              style="background: linear-gradient(135deg, var(--color-primary), #9333ea);">
+        Onayla ve Satın Al
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let quantity = 1;
+  const unitPrice = parseFloat('{{ unit_price | default: 0 }}') || 0;
+  const maxStock = parseInt('{{ product.stock | default: -1 }}');
+  let activeProductId = '{{ product.id }}';
+
+  function updatePriceDisplay() {
+    document.getElementById('quantity-display').textContent = quantity;
+    const total = (unitPrice * quantity).toFixed(2);
+    document.getElementById('total-price-display').textContent = total + ' ₺';
+  }
+
+  function decreaseQuantity() {
+    if (quantity > 1) {
+      quantity--;
+      updatePriceDisplay();
+    }
+  }
+
+  function increaseQuantity() {
+    if (maxStock !== -1 && maxStock > 0 && quantity >= maxStock) {
+      return;
+    }
+    quantity++;
+    updatePriceDisplay();
+  }
+
+  function handleAddToCart() {
+    if (window.CrafterCart && window.CrafterCart.add) {
+      window.CrafterCart.add('{{ product.id }}', quantity);
+    } else {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/cart/add';
+      const idInput = document.createElement('input');
+      idInput.type = 'hidden';
+      idInput.name = 'id';
+      idInput.value = '{{ product.id }}';
+      form.appendChild(idInput);
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'hidden';
+      qtyInput.name = 'quantity';
+      qtyInput.value = quantity;
+      form.appendChild(qtyInput);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+
+  function openBuyModal(id, name, price, image) {
+    {% if customer %}
+      activeProductId = id;
+      document.getElementById('modal-product-name').textContent = name;
+      document.getElementById('modal-product-price').textContent = (unitPrice * quantity).toFixed(2) + ' ₺';
+      document.getElementById('modal-product-qty').textContent = quantity;
+      const imgEl = document.getElementById('modal-product-img');
+      if (imgEl) imgEl.src = image || '';
+      document.getElementById('buy-now-modal').classList.remove('hidden');
+    {% else %}
+      window.location.href = '/auth/login';
+    {% endif %}
+  }
+
+  function closeBuyModal() {
+    document.getElementById('buy-now-modal').classList.add('hidden');
+  }
+
+  async function confirmDirectPurchase() {
+    if (!activeProductId) return;
+    const btn = document.getElementById('modal-confirm-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'İşleniyor...';
+    }
+
+    try {
+      const res = await fetch('/api/storefront/v2/cart/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productIds: [activeProductId], quantity: quantity })
+      });
+      if (res.ok) {
+        window.location.href = '/chest';
+      } else {
+        if (window.CrafterCart && window.CrafterCart.add) {
+          window.CrafterCart.add(activeProductId, quantity);
+        }
+        window.location.href = '/cart';
+      }
+    } catch(err) {
+      window.location.href = '/cart';
+    }
+  }
+</script>

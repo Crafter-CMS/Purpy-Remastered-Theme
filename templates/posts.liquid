@@ -1,0 +1,428 @@
+<!-- ============================================================
+     HABERLER VE DUYURULAR (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Haberler & Duyurular</span>
+  </div>
+
+  <!-- Header -->
+  <div class="flex items-center gap-3.5 mb-8">
+    <div class="w-2 h-10 rounded-full" style="background: linear-gradient(to bottom, var(--color-primary), #9333ea);"></div>
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide" style="color: #ffffff !important;">
+        Haberler ve Duyurular
+      </h1>
+      <p class="text-xs sm:text-sm font-medium text-gray-300">
+        En son haberler, güncellemeler, etkinlikler ve topluluk duyurularını buradan takip edin.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- SOL: Filtreler Sidebar (3 Cols) -->
+    <aside class="lg:col-span-3 space-y-6">
+      <!-- Filtreler Kartı -->
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-6 backdrop-blur-xl space-y-5"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <h3 class="font-black text-white text-sm flex items-center gap-2" style="color: #ffffff !important;">
+          <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+          </svg>
+          <span>Filtreler</span>
+        </h3>
+
+        <!-- Arama -->
+        <div>
+          <label class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-2 block">Haber Ara</label>
+          <div class="relative">
+            <svg
+              class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input
+              type="text"
+              id="searchInput"
+              value="{{ request.searchParams.search | escape }}"
+              placeholder="Başlık veya içerik..."
+              class="w-full pl-10 pr-4 py-3 text-xs rounded-xl border-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-white placeholder:text-gray-500 shadow-inner"
+              style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+            >
+          </div>
+        </div>
+
+        <div class="border-t" style="border-color: rgba(255, 255, 255, 0.08);"></div>
+
+        <!-- Gönderi Tipi -->
+        <div>
+          <label class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-2 block">Gönderi Tipi</label>
+          <div class="space-y-1.5 flex flex-col" id="typeFilters">
+            <button
+              data-type="all"
+              class="filter-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border shadow cursor-pointer"
+              style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25); color: #ffffff; border-color: var(--color-primary);"
+            >
+              Tümü
+            </button>
+            <button
+              data-type="news"
+              class="filter-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3L22 4"/>
+              </svg>
+              <span>Haberler</span>
+            </button>
+            <button
+              data-type="announcement"
+              class="filter-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+              </svg>
+              <span>Duyurular</span>
+            </button>
+            <button
+              data-type="blog"
+              class="filter-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <span>Blog</span>
+            </button>
+            <button
+              data-type="update"
+              class="filter-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <span>Güncellemeler</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="border-t" style="border-color: rgba(255, 255, 255, 0.08);"></div>
+
+        <!-- Sıralama -->
+        <div>
+          <label class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-2 block">Sıralama</label>
+          <div class="space-y-1.5 flex flex-col" id="sortFilters">
+            <button
+              data-sort="createdAt"
+              class="sort-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 border cursor-pointer"
+              style="background: rgba(255, 255, 255, 0.08); color: #ffffff; border-color: rgba(255, 255, 255, 0.15);"
+            >
+              <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span>En Yeni</span>
+            </button>
+            <button
+              data-sort="viewCount"
+              class="sort-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <span>En Çok Okunan</span>
+            </button>
+            <button
+              data-sort="likeCount"
+              class="sort-btn w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-transparent text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+              <span>En Çok Beğenilen</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- İstatistikler -->
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-5 backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <h3 class="font-black text-white mb-3 text-xs uppercase tracking-wider" style="color: #ffffff !important;">İstatistikler</h3>
+        <div class="flex items-center justify-between text-xs font-bold text-gray-300">
+          <span>Toplam Gönderi:</span>
+          <span class="text-primary font-black text-sm">{{ posts.size }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- SAĞ: Gönderiler Grid (9 Cols) -->
+    <div class="lg:col-span-9">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="postsGrid">
+        {% if posts.size > 0 %}
+          {% for post in posts %}
+            <a
+              href="/posts/{{ post.slug }}"
+              class="post-card group rounded-3xl border-2 overflow-hidden hover:border-primary/60 hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative"
+              style="
+                background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+              "
+              data-title="{{ post.title | downcase }}"
+              data-type="{{ post.type }}"
+              data-created="{{ post.createdAt }}"
+              data-views="{{ post.viewCount | default: 0 }}"
+              data-likes="{{ post.likeCount | default: 0 }}"
+            >
+              <!-- Hot Badge / Pinned -->
+              <div class="absolute top-3 right-3 z-10 flex gap-2">
+                {% if post.isPinned %}
+                  <div class="p-1.5 rounded-xl border border-primary/40 text-primary shadow-lg"
+                       style="background: rgba(14, 9, 20, 0.85);">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.828 3h3.982a2 2 0 011.992 2.181l-.637 7A2 2 0 0113.174 14H11.5v3.5a.5.5 0 01-1 0V14H8.826a2 2 0 01-1.991-1.819l-.637-7a2 2 0 011.992-2.181h1.638z"/>
+                    </svg>
+                  </div>
+                {% endif %}
+                {% if post.isHot %}
+                  <div class="bg-rose-600 border border-rose-400/40 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-md">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <span>HOT</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Image -->
+              <div class="h-44 overflow-hidden relative border-b" style="background: rgba(14, 9, 20, 0.8); border-color: rgba(255, 255, 255, 0.08);">
+                <img
+                  src="{% if post.featuredImage != blank %}{{ post.featuredImage }}{% else %}https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop{% endif %}"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  alt="{{ post.title }}"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-[#120a18] via-transparent to-transparent opacity-80"></div>
+              </div>
+
+              <!-- Content -->
+              <div class="p-5 flex flex-col flex-grow">
+                <!-- Type Badge -->
+                <div class="mb-3">
+                  {% if post.type == 'update' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-amber-300 border border-amber-500/30" style="background: rgba(245, 158, 11, 0.15);">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                      Güncelleme
+                    </span>
+                  {% elsif post.type == 'announcement' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-purple-300 border border-purple-500/30" style="background: rgba(168, 85, 247, 0.15);">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                      Duyuru
+                    </span>
+                  {% elsif post.type == 'blog' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-emerald-300 border border-emerald-500/30" style="background: rgba(16, 185, 129, 0.15);">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      Blog
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-blue-300 border border-blue-500/30" style="background: rgba(59, 130, 246, 0.15);">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3L22 4"/></svg>
+                      Haber
+                    </span>
+                  {% endif %}
+                </div>
+
+                <h4 class="text-base font-black text-white leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2" style="color: #ffffff !important;">
+                  {{ post.title }}
+                </h4>
+                <p class="text-xs text-gray-400 line-clamp-2 mt-auto font-medium leading-relaxed">
+                  {% if post.metaDescription != blank %}
+                    {{ post.metaDescription }}
+                  {% else %}
+                    {{
+                      post.content
+                      | lexical_text
+                      | truncate: 120
+                      | default: 'İçeriğin devamını okumak için tıklayın...'
+                    }}
+                  {% endif %}
+                </p>
+
+                <!-- Alt Sayaçlar & Ok -->
+                <div class="mt-4 pt-3.5 border-t flex items-center justify-between text-[11px] font-bold text-gray-400" style="border-color: rgba(255, 255, 255, 0.08);">
+                  <div class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <span>{{ post.viewCount | default: 0 }}</span>
+                  </div>
+                  <div class="flex items-center gap-1 text-primary font-black group-hover:translate-x-1 transition-transform">
+                    <span>Oku</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <span>{{ post.likeCount | default: 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="col-span-full py-16 text-center rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-3"
+               style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+            <svg class="w-12 h-12 text-gray-500 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3L22 4"/>
+            </svg>
+            <h3 class="text-base font-black text-white">Gönderi Bulunamadı</h3>
+            <p class="text-xs text-gray-400">Bu filtrelere uygun herhangi bir içerik bulunamadı.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <div
+        id="noResults"
+        class="hidden col-span-full py-16 text-center rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-3"
+        style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);"
+      >
+        <svg class="w-12 h-12 text-gray-500 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3L22 4"/>
+        </svg>
+        <h3 class="text-base font-black text-white">Arama Sonucu Yok</h3>
+        <p class="text-xs text-gray-400">Aradığınız kelimeye veya filtreye uygun içerik bulunamadı.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const typeButtons = document.querySelectorAll('.filter-btn');
+    const sortButtons = document.querySelectorAll('.sort-btn');
+    const postsGrid = document.getElementById('postsGrid');
+
+    let currentType = new URLSearchParams(window.location.search).get('type') || 'all';
+    let currentSort = new URLSearchParams(window.location.search).get('sortBy') || 'createdAt';
+    let currentSearch = new URLSearchParams(window.location.search).get('search') || '';
+
+    let debounceTimer;
+    let currentFetchController = null;
+
+    searchInput?.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        fetchPosts();
+      }, 500);
+    });
+
+    typeButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        typeButtons.forEach((b) => {
+          b.style.background = 'transparent';
+          b.style.borderColor = 'transparent';
+          b.style.color = '#9ca3af';
+        });
+        e.currentTarget.style.background = 'rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)';
+        e.currentTarget.style.borderColor = 'var(--color-primary)';
+        e.currentTarget.style.color = '#ffffff';
+
+        currentType = e.currentTarget.dataset.type;
+        fetchPosts();
+      });
+    });
+
+    sortButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        sortButtons.forEach((b) => {
+          b.style.background = 'transparent';
+          b.style.borderColor = 'transparent';
+          b.style.color = '#9ca3af';
+        });
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+        e.currentTarget.style.color = '#ffffff';
+
+        currentSort = e.currentTarget.dataset.sort;
+        fetchPosts();
+      });
+    });
+
+    async function fetchPosts() {
+      if (!postsGrid) return;
+      postsGrid.style.opacity = '0.5';
+      postsGrid.style.pointerEvents = 'none';
+
+      const params = new URLSearchParams();
+      if (currentType && currentType !== 'all') params.set('type', currentType);
+      if (currentSort && currentSort !== 'createdAt') params.set('sortBy', currentSort);
+      if (currentSearch) params.set('search', currentSearch);
+
+      const queryString = params.toString();
+      const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+
+      if (currentFetchController) {
+        currentFetchController.abort();
+      }
+      currentFetchController = new AbortController();
+
+      try {
+        window.history.pushState({}, '', newUrl);
+
+        const response = await fetch(newUrl, {
+          signal: currentFetchController.signal,
+        });
+        const html = await response.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newGrid = doc.getElementById('postsGrid');
+        const newNoResults = doc.getElementById('noResults');
+
+        if (newGrid) {
+          postsGrid.innerHTML = newGrid.innerHTML;
+        }
+
+        const currentNoResults = document.getElementById('noResults');
+        if (newNoResults && currentNoResults) {
+          currentNoResults.className = newNoResults.className;
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error('Gönderiler yüklenirken hata oluştu:', error);
+      } finally {
+        if (!currentFetchController || currentFetchController.signal.aborted === false) {
+          postsGrid.style.opacity = '1';
+          postsGrid.style.pointerEvents = 'auto';
+        }
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      window.location.reload();
+    });
+  });
+</script>

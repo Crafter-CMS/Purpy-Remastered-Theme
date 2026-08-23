@@ -1,0 +1,128 @@
+<!-- ============================================================
+     OY VER (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Oy Ver</span>
+  </div>
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-2 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+    <div class="flex items-center gap-3.5">
+      <div class="w-2 h-10 rounded-full" style="background: linear-gradient(to bottom, var(--color-primary), #9333ea);"></div>
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide" style="color: #ffffff !important;">
+          Sunucuya Oy Ver
+        </h1>
+        <p class="text-xs sm:text-sm font-medium text-gray-300">
+          Sunucumuza oy vererek hem bize destek olabilir, hem de oyun içi birbirinden değerli ödüller kazanabilirsiniz!
+        </p>
+      </div>
+    </div>
+
+    <!-- Vote Status Badge -->
+    <div>
+      {% if customer.nextVoteAt %}
+        <script>
+          (function() {
+            const nextVote = new Date('{{ customer.nextVoteAt }}');
+            if (nextVote > new Date()) {
+              document.write(`
+                <div class="px-4 py-2.5 rounded-2xl border flex items-center gap-2.5 text-xs font-bold shadow-lg"
+                     style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #fcd34d;">
+                  <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>Sonraki Oy: ${nextVote.toLocaleString('tr-TR')}</span>
+                </div>
+              `);
+            } else {
+              document.write(`
+                <div class="px-4 py-2.5 rounded-2xl border flex items-center gap-2 text-xs font-black uppercase tracking-wider shadow-lg"
+                     style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #6ee7b7;">
+                  <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>Şimdi Oy Verebilirsiniz</span>
+                </div>
+              `);
+            }
+          })();
+        </script>
+      {% else %}
+        <div class="px-4 py-2.5 rounded-2xl border flex items-center gap-2 text-xs font-black uppercase tracking-wider shadow-lg"
+             style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #6ee7b7;">
+          <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Şimdi Oy Verebilirsiniz</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if voteProviders.size == 0 %}
+    <div
+      class="rounded-3xl border-2 shadow-2xl p-12 text-center backdrop-blur-xl flex flex-col items-center justify-center gap-3"
+      style="
+        background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+      "
+    >
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center border shadow-lg"
+           style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #fcd34d;">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-lg font-black text-white" style="color: #ffffff !important;">Aktif Platform Bulunamadı</h3>
+      <p class="text-xs text-gray-400 font-medium">Şu anda sunucumuz için aktif bir oy platformu tanımlanmamış.</p>
+    </div>
+  {% else %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for provider in voteProviders %}
+        {% if provider.isActive %}
+          <div
+            class="rounded-3xl border-2 p-7 shadow-2xl transition-all duration-300 hover:border-primary/60 hover:scale-[1.02] backdrop-blur-xl flex flex-col items-center text-center group"
+            style="
+              background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+            "
+          >
+            {% if provider.logo %}
+              <img src="{{ provider.logo }}" alt="{{ provider.type }}" class="w-16 h-16 rounded-2xl mb-4 shadow-lg object-contain p-2 bg-white/5 border border-white/10">
+            {% elsif provider.type == 'serversmc' %}
+              <img src="/images/vote-providers/smc.webp" alt="ServersMC" class="w-16 h-16 rounded-2xl mb-4 shadow-lg object-contain p-2 bg-white/5 border border-white/10">
+            {% else %}
+              <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg border group-hover:scale-110 transition-transform"
+                   style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            {% endif %}
+
+            <h3 class="text-lg font-black text-white mb-1.5 capitalize" style="color: #ffffff !important;">
+              {% if provider.type == 'serversmc' %}ServersMC{% else %}{{ provider.type }}{% endif %}
+            </h3>
+            
+            <p class="text-xs font-medium text-gray-400 text-center mb-6 leading-relaxed">
+              Bu platform üzerinden sunucumuza oy vererek ödül kazanabilirsiniz.
+            </p>
+
+            <a
+              href="/vote/{{ provider.id }}"
+              class="w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 text-center mt-auto"
+              style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+            >
+              Oy Ver & Devam Et
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

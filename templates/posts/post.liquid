@@ -1,0 +1,169 @@
+<!-- ============================================================
+     GÖNDERİ DETAYI (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1050px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <a href="/posts" class="hover:text-primary transition-colors" style="color: #cbd5e1;">Haberler & Duyurular</a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold line-clamp-1" style="color: var(--color-primary);">{{ post.title }}</span>
+  </div>
+
+  <div
+    class="rounded-3xl border-2 shadow-2xl overflow-hidden backdrop-blur-xl"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <!-- Post Header Banner -->
+    <div class="h-[280px] sm:h-[360px] md:h-[420px] relative overflow-hidden">
+      <img
+        src="{% if post.featuredImage != blank %}{{ post.featuredImage }}{% else %}https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop{% endif %}"
+        class="w-full h-full object-cover"
+        alt="{{ post.title }}"
+      >
+      <!-- Dark gradient overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#140c1c] via-[#140c1c]/70 to-transparent"></div>
+
+      <div class="absolute bottom-0 left-0 p-6 sm:p-10 md:p-12 w-full z-10">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class="px-3.5 py-1 rounded-xl text-xs font-black uppercase tracking-wider text-white shadow-lg"
+                style="background: linear-gradient(135deg, var(--color-primary), #9333ea);">
+            {% if post.type == 'update' -%}
+              Güncelleme
+            {% elsif post.type == 'announcement' -%}
+              Duyuru
+            {% elsif post.type == 'news' -%}
+              Haber
+            {% elsif post.type == 'blog' -%}
+              Blog
+            {% else -%}
+              {{- post.type | default: 'Duyuru' -}}
+            {%- endif %}
+          </span>
+          <span class="text-gray-300 font-bold text-xs sm:text-sm flex items-center gap-2">
+            <span>{{ post.createdAt | date: '%d.%m.%Y' }}</span>
+            <span>&bull;</span>
+            <span class="text-purple-300 font-semibold">{{ post.author.username | default: post.authorName | default: 'Yönetim' }}</span>
+          </span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl md:text-5xl font-black text-white leading-tight drop-shadow-2xl" style="color: #ffffff !important;">
+          {{ post.title }}
+        </h1>
+      </div>
+    </div>
+
+    <!-- Post Content -->
+    <div class="p-6 sm:p-10 md:p-12">
+      <article class="prose prose-invert prose-lg max-w-none text-gray-200 prose-headings:text-white prose-a:text-purple-400 hover:prose-a:text-purple-300 prose-img:rounded-3xl prose-img:border-2 prose-img:border-primary/20 prose-strong:text-white leading-relaxed">
+        {{ post.content | lexical_html }}
+      </article>
+
+      <!-- Tags -->
+      {% if post.tags and post.tags.size > 0 %}
+        <div class="mt-12 pt-8 border-t flex flex-wrap gap-2" style="border-color: rgba(255, 255, 255, 0.08);">
+          {% for tag in post.tags %}
+            <span class="px-3 py-1.5 rounded-xl text-xs font-bold text-purple-300 border border-primary/30"
+                  style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);">
+              #{{ tag }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- Post Stats & Actions -->
+      <div class="mt-8 pt-6 border-t flex flex-wrap items-center justify-between gap-4" style="border-color: rgba(255, 255, 255, 0.08);">
+        <div class="flex items-center gap-6 text-gray-400 font-bold text-xs sm:text-sm">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <span>{{ post.viewCount | default: 0 }} Görüntülenme</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <span id="likeCountText">{{ post.likeCount | default: 0 }} Beğeni</span>
+          </div>
+        </div>
+
+        <button 
+          id="likeBtn" 
+          data-post-id="{{ post.id }}"
+          data-liked="{% if customer and post.likedBy contains customer.id %}true{% else %}false{% endif %}"
+          class="flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 border cursor-pointer shadow-lg {% if customer and post.likedBy contains customer.id %}bg-rose-500/20 text-rose-300 border-rose-500/40{% else %}bg-white/5 text-gray-300 border-white/10 hover:bg-white/10{% endif %}"
+        >
+          <svg class="w-4 h-4 {% if customer and post.likedBy contains customer.id %}fill-current text-rose-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          <span id="likeBtnText">{% if customer and post.likedBy contains customer.id %}Beğendin{% else %}Beğen{% endif %}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center pt-2">
+    <a
+      href="/posts"
+      class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-gray-300 hover:text-white border border-white/10 hover:border-primary/40 bg-white/5 hover:bg-white/10 transition-all hover:scale-105"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Tüm Gönderilere Dön</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const likeBtn = document.getElementById('likeBtn');
+    const likeCountText = document.getElementById('likeCountText');
+    const likeBtnText = document.getElementById('likeBtnText');
+    const likeIcon = likeBtn?.querySelector('svg');
+
+    if (likeBtn) {
+      likeBtn.addEventListener('click', async () => {
+        {% if customer %}
+          const postId = likeBtn.getAttribute('data-post-id');
+          const isLiked = likeBtn.getAttribute('data-liked') === 'true';
+          const currentLikes = parseInt(likeCountText?.innerText) || 0;
+          
+          if (isLiked) {
+            likeBtn.setAttribute('data-liked', 'false');
+            likeBtn.className = 'flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 border cursor-pointer shadow-lg bg-white/5 text-gray-300 border-white/10 hover:bg-white/10';
+            likeIcon?.classList.remove('fill-current', 'text-rose-400');
+            if (likeBtnText) likeBtnText.innerText = 'Beğen';
+            if (likeCountText) likeCountText.innerText = Math.max(0, currentLikes - 1) + ' Beğeni';
+          } else {
+            likeBtn.setAttribute('data-liked', 'true');
+            likeBtn.className = 'flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 border cursor-pointer shadow-lg bg-rose-500/20 text-rose-300 border-rose-500/40';
+            likeIcon?.classList.add('fill-current', 'text-rose-400');
+            if (likeBtnText) likeBtnText.innerText = 'Beğendin';
+            if (likeCountText) likeCountText.innerText = (currentLikes + 1) + ' Beğeni';
+          }
+
+          try {
+            await fetch(`/api/storefront/v2/posts/${postId}/like`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+          } catch (e) {}
+        {% else %}
+          window.location.href = '/auth/sign-in?return=' + encodeURIComponent(window.location.pathname);
+        {% endif %}
+      });
+    }
+  });
+</script>

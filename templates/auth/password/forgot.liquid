@@ -1,0 +1,187 @@
+{% if websiteData.security.cf_turnstile.site_key %}
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endif %}
+
+<div class="relative w-full min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-10 overflow-hidden" style="background: #0e0914;">
+  <!-- Background Blurred Wallpaper -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <img
+      src="{% if settings.auth.background %}{{ settings.auth.background }}{% elsif settings.header.banner %}{{ settings.header.banner }}{% else %}https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=2070&auto=format&fit=crop{% endif %}"
+      alt="Background"
+      class="w-full h-full object-cover blur-md opacity-25 scale-105"
+    >
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0e0914] via-[#0e0914]/85 to-[#0e0914]/60"></div>
+    <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-3xl opacity-20" style="background: var(--color-primary);"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20" style="background: var(--color-primary);"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="w-full max-w-[1200px] mx-auto relative z-10">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden border-2 shadow-2xl backdrop-blur-xl"
+      style="
+        background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      "
+    >
+      <!-- LEFT SIDE: Forgot Password Form (7 Cols) -->
+      <div class="lg:col-span-7 p-6 sm:p-10 lg:p-14 flex flex-col justify-center relative">
+        <!-- Back to Sign In -->
+        <a
+          href="/auth/sign-in"
+          class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-400 hover:text-primary transition-colors mb-6 w-fit"
+          style="color: #cbd5e1;"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Giriş Sayfasına Dön</span>
+        </a>
+
+        <!-- Logo -->
+        <a href="/" class="block mb-6">
+          {% assign default_logo = 'https://avatars.githubusercontent.com/u/3840546?s=280&v=4' %}
+          <img
+            src="{{ settings.logo_light | default: default_logo }}"
+            alt="{{ shop.name }}"
+            class="h-12 sm:h-14 object-contain drop-shadow-md"
+          >
+        </a>
+
+        <div id="forgot-container">
+          <div class="mb-6">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white mb-2" style="color: #ffffff !important;">
+              Şifremi Unuttum
+            </h1>
+            <p class="text-xs sm:text-sm font-medium" style="color: #94a3b8;">
+              E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.
+            </p>
+          </div>
+
+          <form id="forgotForm" class="space-y-4">
+            <div>
+              <label class="block text-xs font-black uppercase tracking-wider text-gray-300 mb-1.5">
+                Kayıtlı E-posta Adresiniz
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="ornek@minecraft.com"
+                class="w-full text-white text-sm rounded-xl px-4 py-3.5 border-2 transition-all outline-none"
+                style="
+                  background: rgba(14, 9, 20, 0.85);
+                  border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+                  color: #ffffff;
+                "
+                onfocus="this.style.borderColor='var(--color-primary)';"
+                onblur="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)';"
+              >
+            </div>
+
+            {% if websiteData.security.cf_turnstile.site_key %}
+              <div class="cf-turnstile mt-2" data-sitekey="{{ websiteData.security.cf_turnstile.site_key }}"></div>
+            {% endif %}
+
+            <button
+              type="submit"
+              class="w-full py-4 px-6 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer mt-2"
+              style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+            >
+              <span>Sıfırlama Bağlantısı Gönder</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Success Box (Initially Hidden) -->
+          <div id="forgot-success" class="hidden mt-6 p-5 rounded-2xl border flex items-start gap-3"
+               style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+            <svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+              <h4 class="font-bold text-white text-sm">Bağlantı Gönderildi!</h4>
+              <p class="text-xs text-gray-300 mt-1">Eğer bu e-posta adresiyle eşleşen bir hesap varsa, şifre sıfırlama talimatları gönderilmiştir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: Showcase Artwork (5 Cols) -->
+      <div
+        class="hidden lg:flex lg:col-span-5 relative overflow-hidden flex-col justify-end p-10 xl:p-12 border-l-2"
+        style="
+          background: linear-gradient(180deg, rgba(20, 12, 28, 0.7) 0%, rgba(14, 9, 20, 0.95) 100%);
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+        "
+      >
+        <img
+          src="{% if settings.auth.background %}{{ settings.auth.background }}{% elsif settings.header.banner %}{{ settings.header.banner }}{% else %}https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=2070&auto=format&fit=crop{% endif %}"
+          alt="Showcase"
+          class="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0e0914] via-[#0e0914]/70 to-transparent"></div>
+
+        <div class="relative z-10 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border"
+               style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Güvenli Hesap Kurtarma</span>
+          </div>
+
+          <h2 class="text-3xl xl:text-4xl font-black text-white leading-tight" style="color: #ffffff !important;">
+            Hesabınızı Güvende Tutun
+          </h2>
+
+          <p class="text-sm font-medium leading-relaxed" style="color: #cbd5e1;">
+            Şifrenizi unuttuysanız endişelenmeyin. Kayıtlı e-posta adresiniz üzerinden hesabınızı saniyeler içinde kurtarabilirsiniz.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('forgotForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    if (data['cf-turnstile-response']) {
+      data.turnstileToken = data['cf-turnstile-response'];
+      delete data['cf-turnstile-response'];
+    }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="animate-pulse">Gönderiliyor...</span>';
+
+    try {
+      const res = await fetch('/api/storefront/v2/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+
+      if (result.success || res.ok) {
+        document.getElementById('forgotForm').classList.add('hidden');
+        document.getElementById('forgot-success').classList.remove('hidden');
+      } else {
+        window.showToast?.(result.message || 'Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    } catch (err) {
+      window.showToast?.('Bağlantı hatası oluştu!', 'error');
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  });
+</script>

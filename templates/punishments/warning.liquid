@@ -1,0 +1,210 @@
+<!-- ============================================================
+     UYARILAR (WARNING) (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <a href="/punishments" class="hover:text-primary transition-colors" style="color: #cbd5e1;">Cezalar</a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: #fbbf24;">Uyarılar</span>
+  </div>
+
+  <!-- Başlık & Arama -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-2 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+    <div class="flex items-center gap-3.5">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center border shadow-lg"
+           style="background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide" style="color: #ffffff !important;">
+          Uyarılar (Warn)
+        </h1>
+        <p class="text-xs sm:text-sm font-medium text-gray-300">
+          Kuralları ihlal ettiği için uyarılan oyuncuların kayıtları.
+        </p>
+      </div>
+    </div>
+
+    <!-- Arama Kutusu -->
+    <div class="relative w-full sm:w-80">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Oyuncu adı veya yetkili ara..."
+        class="w-full pl-10 pr-4 py-3 text-xs rounded-xl border-2 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 transition-all font-medium text-white placeholder:text-gray-500 shadow-inner"
+        style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+      >
+    </div>
+  </div>
+
+  <!-- Cezalar Listesi -->
+  <div
+    class="rounded-3xl border-2 shadow-2xl p-6 sm:p-8 backdrop-blur-xl"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <div id="punishments-list" class="space-y-3">
+      <div class="py-12 text-center text-gray-400 font-bold flex flex-col items-center justify-center">
+        <div class="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <span class="text-xs">Kayıtlar Yükleniyor...</span>
+      </div>
+    </div>
+    
+    <!-- Pagination -->
+    <div id="pagination-controls" class="hidden mt-8 pt-6 border-t flex items-center justify-between" style="border-color: rgba(255, 255, 255, 0.08);">
+      <div class="text-xs font-bold text-gray-400" id="page-info"></div>
+      <div class="flex items-center gap-2">
+        <button id="prev-page" class="px-4 py-2 rounded-xl border text-xs font-bold text-gray-300 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.1);">
+          &larr; Önceki
+        </button>
+        <button id="next-page" class="px-4 py-2 rounded-xl border text-xs font-bold text-gray-300 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.1);">
+          Sonraki &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.SERVER_PUNISHMENTS_DATA = {{ punishments | json }};
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const listContainer = document.getElementById('punishments-list');
+    const searchInput = document.getElementById('search-input');
+    const paginationControls = document.getElementById('pagination-controls');
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageInfo = document.getElementById('page-info');
+
+    let allData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    function formatTimeAgo(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      let interval = seconds / 31536000;
+      if (interval > 1) return Math.floor(interval) + ' yıl önce';
+      interval = seconds / 2592000;
+      if (interval > 1) return Math.floor(interval) + ' ay önce';
+      interval = seconds / 86400;
+      if (interval > 1) return Math.floor(interval) + ' gün önce';
+      interval = seconds / 3600;
+      if (interval > 1) return Math.floor(interval) + ' saat önce';
+      interval = seconds / 60;
+      if (interval > 1) return Math.floor(interval) + ' dk önce';
+      return 'Az önce';
+    }
+
+    function renderPage() {
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageData = filteredData.slice(start, end);
+
+      if (pageData.length === 0) {
+        listContainer.innerHTML = `
+          <div class="py-12 text-center text-xs text-gray-400 font-bold">Kriterlere uygun uyarı kaydı bulunamadı.</div>
+        `;
+        paginationControls.classList.add('hidden');
+        return;
+      }
+
+      listContainer.innerHTML = pageData.map(item => `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border transition-all hover:bg-white/5"
+             style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+          <div class="flex items-center gap-3.5">
+            <img src="https://mc-heads.net/avatar/${item.punishedUser || 'steve'}/40" class="w-10 h-10 rounded-xl border border-amber-500/40 shadow" alt="">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-black text-white text-sm" style="color: #ffffff !important;">${item.punishedUser || 'Bilinmiyor'}</span>
+                <span class="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-lg text-[10px] font-black uppercase tracking-wider">WARN</span>
+              </div>
+              <div class="text-xs text-gray-400 mt-1 font-medium line-clamp-1">
+                Sebep: <span class="text-gray-300">${item.reason || 'Sebep belirtilmemiş'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1 text-[11px] font-semibold text-gray-400 shrink-0">
+            <div>Yetkili: <span class="text-purple-300 font-bold">${item.operator || 'Sistem'}</span></div>
+            <div class="text-[10px] text-gray-500">${formatTimeAgo(item.createdAt)}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+      pageInfo.innerText = `Sayfa ${currentPage} / ${totalPages || 1} (${filteredData.length} Kayıt)`;
+      
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage >= totalPages;
+
+      if (totalPages > 1) {
+        paginationControls.classList.remove('hidden');
+      } else {
+        paginationControls.classList.add('hidden');
+      }
+    }
+
+    function filterAndRender() {
+      const term = (searchInput?.value || '').toLowerCase().trim();
+      filteredData = allData.filter(item => {
+        const u = (item.punishedUser || '').toLowerCase();
+        const op = (item.operator || '').toLowerCase();
+        const r = (item.reason || '').toLowerCase();
+        return u.includes(term) || op.includes(term) || r.includes(term);
+      });
+      currentPage = 1;
+      renderPage();
+    }
+
+    function init(data) {
+      allData = data.filter(i => i.type === 'WARNING');
+      filteredData = allData;
+      renderPage();
+    }
+
+    searchInput?.addEventListener('input', filterAndRender);
+    prevBtn?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderPage(); } });
+    nextBtn?.addEventListener('click', () => { if (currentPage < Math.ceil(filteredData.length / itemsPerPage)) { currentPage++; renderPage(); } });
+
+    if (window.SERVER_PUNISHMENTS_DATA && window.SERVER_PUNISHMENTS_DATA.length > 0) {
+      init(window.SERVER_PUNISHMENTS_DATA);
+    } else {
+      fetch('/api/storefront/v2/punishments')
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            init(data);
+          } else {
+            listContainer.innerHTML = '<div class="py-12 text-center text-xs text-gray-400 font-bold">Kayıtlar yüklenemedi.</div>';
+          }
+        })
+        .catch(() => {
+          listContainer.innerHTML = '<div class="py-12 text-center text-xs text-gray-400 font-bold">Sunucuyla bağlantı kurulamadı.</div>';
+        });
+    }
+  });
+</script>

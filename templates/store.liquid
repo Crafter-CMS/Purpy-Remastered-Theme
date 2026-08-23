@@ -1,0 +1,123 @@
+<!-- ============================================================
+     MAĞAZA / OYUN SEÇİMİ (crafter-purpy 1:1 Port)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
+  <!-- Header -->
+  <div class="mb-6 sm:mb-8">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-2 h-8 rounded-full" style="background: linear-gradient(to bottom, var(--color-primary), #9333ea);"></div>
+      <h1 class="text-2xl sm:text-3xl font-black uppercase tracking-wide text-white" style="color: #ffffff !important;">
+        {{ settings.store.title | default: 'Oyunlar' }}
+      </h1>
+    </div>
+    <p class="text-sm font-medium text-gray-400">
+      {{ settings.store.description | default: 'Sunucumuza destek olmak ve harika avantajlar elde etmek için oynamak istediğiniz oyunu seçin.' }}
+    </p>
+  </div>
+
+  <!-- SUNUCU / OYUN KARTLARI (2 Kolonlu Orijinal CategoryCard Düzeni) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% if servers and servers.size > 0 %}
+      {% for server in servers %}
+        <a href="/store/{{ server.slug }}" class="relative group block cursor-pointer">
+          <!-- Main Card Container -->
+          <div
+            class="relative overflow-hidden rounded-2xl w-full h-[180px] sm:h-[200px] md:h-[220px] transition-all duration-500 ease-out hover:scale-[1.02] hover:-translate-y-1 shadow-xl hover:shadow-2xl border-2"
+            style="
+              background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+            "
+            onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)'; this.style.boxShadow='0 20px 40px rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)';"
+            onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.20)'; this.style.boxShadow='none';"
+          >
+            <!-- Animated Gradient Overlay -->
+            <div
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style="background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 124, 58, 237), 0.15), transparent, rgba(140, 80, 220, 0.15));"
+            ></div>
+
+            <!-- Content Container -->
+            <div class="relative h-full flex items-center justify-between gap-3 p-5 sm:p-6 z-10">
+              <!-- Left Section - Text -->
+              <div class="flex-1 flex flex-col justify-center min-w-0 pr-2">
+                <div class="mb-2">
+                  <div
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border backdrop-blur-sm"
+                    style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.12); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);"
+                  >
+                    <div class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: var(--color-primary);"></div>
+                    <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider" style="color: var(--color-primary);">
+                      Sunucu
+                    </span>
+                  </div>
+                </div>
+
+                <h2 class="font-black text-xl sm:text-2xl md:text-3xl mb-1.5 leading-tight transition-all duration-500 ease-out transform group-hover:translate-x-1 line-clamp-2">
+                  <span
+                    class="transition-all duration-300"
+                    style="color: #ffffff !important;"
+                  >
+                    {{ server.name }}
+                  </span>
+                </h2>
+
+                <p
+                  class="text-xs sm:text-sm font-semibold transition-all duration-500 transform group-hover:translate-x-1 flex items-center gap-1.5 line-clamp-1"
+                  style="color: rgba(255, 255, 255, 0.65);"
+                >
+                  <span>Kategoriye git</span>
+                  <span class="inline-block transition-transform duration-500 group-hover:translate-x-1 opacity-0 group-hover:opacity-100" style="color: var(--color-primary);">→</span>
+                </p>
+              </div>
+
+              <!-- Right Section - Image -->
+              <div class="flex-shrink-0">
+                <div class="relative w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-[130px] md:h-[130px]">
+                  <!-- Subtle Image Glow -->
+                  <div
+                    class="absolute inset-0 rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none"
+                    style="background-color: var(--color-primary);"
+                  ></div>
+
+                  <!-- Image Container -->
+                  <div class="relative w-full h-full transform transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-3">
+                    {% if server.image != blank %}
+                      <img
+                        src="{{ server.image }}"
+                        alt="{{ server.name }}"
+                        class="w-full h-full object-contain drop-shadow-2xl transition-all duration-500 group-hover:brightness-110"
+                      >
+                    {% else %}
+                      <div class="w-full h-full flex items-center justify-center rounded-xl border border-primary/20 bg-purple-950/30">
+                        <svg class="w-10 h-10 text-primary/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shine Effect on Hover -->
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none overflow-hidden">
+              <div class="absolute top-0 -left-full h-full w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:left-full transition-all duration-1000"></div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    {% else %}
+      <div
+        class="col-span-full py-16 px-6 text-center rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3"
+        style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255,255,255,0.08);"
+      >
+        <svg class="w-16 h-16 text-gray-500 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <h3 class="text-lg font-bold text-white">Henüz Oyun / Sunucu Bulunmuyor</h3>
+        <p class="text-xs text-gray-400">Şu an için mağazada listelenecek aktif bir sunucu eklenmemiş.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+

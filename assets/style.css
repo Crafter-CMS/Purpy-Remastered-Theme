@@ -1,0 +1,427 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&display=swap');
+
+/* ============================================================
+   CRAFTER THEME — CORE RESET & DESIGN SYSTEM
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Dark base (from old purpy theme: #0e0914) */
+  --bg-base: #0e0914;
+  --bg-card: #1a1020;
+  --bg-card-hover: #1f1428;
+  --bg-card-elevated: #241830;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: var(--color-primary);
+
+  /* Text */
+  --text-primary: #f1f0f3;
+  --text-secondary: #a89db8;
+  --text-muted: #7a6e8a;
+
+  /* Accent */
+  --accent: var(--color-primary);
+  --accent-glow: rgba(var(--color-primary-rgb, 0, 86, 179), 0.25);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.font-display {
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0710; }
+::-webkit-scrollbar-thumb { background: #2d1f3d; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: fadeInUp 0.4s ease-out both;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Logo yüzme (levitate) animasyonu — eski temanın HeroLogo.tsx'i */
+@keyframes levitate {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-levitate {
+  animation: levitate 4s ease-in-out infinite;
+}
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+.marquee-wrapper {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 40s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   WAVE DIVIDER
+   ============================================================ */
+.wave-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  pointer-events: none;
+}
+.wave-divider svg {
+  display: block;
+  width: 100%;
+  height: 80px;
+}
+
+/* ============================================================
+   GLASSMORPHISM NAVBAR BAR
+   ============================================================ */
+.navbar-bar {
+  background: linear-gradient(135deg, rgba(30, 18, 45, 0.95), rgba(20, 12, 32, 0.85));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(var(--color-primary-rgb, 100, 60, 160), 0.25);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, rgba(var(--color-primary-rgb, 100,60,160),0.15) 0%, transparent 70%);
+  border-radius: 0 0 100% 0;
+}
+
+.navbar-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, rgba(var(--color-primary-rgb, 100,60,160),0.1) 0%, transparent 70%);
+  border-radius: 100% 0 0 0;
+}
+
+.navbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 20px;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.navbar-btn-menu {
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  border-color: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.navbar-btn-menu:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10));
+  border-color: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.navbar-btn-cart {
+  background: linear-gradient(135deg, rgba(var(--color-primary-rgb,100,60,160),0.8), rgba(var(--color-primary-rgb,100,60,160),0.6));
+  border-color: rgba(var(--color-primary-rgb,100,60,160),0.5);
+  color: #fff;
+}
+.navbar-btn-cart:hover {
+  background: linear-gradient(135deg, var(--color-primary), rgba(var(--color-primary-rgb,100,60,160),0.9));
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.navbar-btn-auth {
+  background: linear-gradient(135deg, rgba(140, 80, 220, 0.8), rgba(100, 50, 180, 0.6));
+  border-color: rgba(140, 80, 220, 0.4);
+  color: #fff;
+}
+.navbar-btn-auth:hover {
+  background: linear-gradient(135deg, rgba(160, 100, 240, 0.9), rgba(120, 70, 200, 0.8));
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(140, 80, 220, 0.4);
+}
+
+/* ============================================================
+   DARK CARDS
+   ============================================================ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transform: translateY(-2px);
+}
+
+.card-elevated {
+  background: var(--bg-card-elevated);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-xl);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, transparent));
+  color: #fff;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--accent-glow);
+  filter: brightness(1.1);
+}
+
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.section-title-bar {
+  width: 4px;
+  height: 28px;
+  background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 50%, transparent));
+  border-radius: 2px;
+}
+
+.section-title-icon {
+  width: 32px; height: 32px;
+  background: rgba(var(--color-primary-rgb,100,60,160),0.15);
+  border: 1px solid rgba(var(--color-primary-rgb,100,60,160),0.25);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   DARK FOOTER
+   ============================================================ */
+.footer-dark {
+  background: linear-gradient(to bottom, #0a0710, #090610);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-dark h3 {
+  color: var(--text-primary);
+}
+
+.footer-dark p,
+.footer-dark li,
+.footer-dark a {
+  color: var(--text-secondary);
+}
+
+.footer-dark a:hover {
+  color: var(--accent);
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+.footer-link:hover {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+.social-btn {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.social-btn:hover {
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.social-btn-discord:hover { background: #5865F2; color: #fff; border-color: #5865F2; }
+.social-btn-instagram:hover { background: #E1306C; color: #fff; border-color: #E1306C; }
+.social-btn-tiktok:hover { background: #000; color: #fff; border-color: #333; }
+.social-btn-youtube:hover { background: #FF0000; color: #fff; border-color: #FF0000; }
+.social-btn-forum:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ============================================================
+   DARK PROMO BAR
+   ============================================================ */
+.promo-bar-dark {
+  background: rgba(14, 9, 20, 0.9);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ============================================================
+   SUPPORTER / PATRON CARD DARK
+   ============================================================ */
+.patron-item-dark {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+.patron-item-dark:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* ============================================================
+   MOBILE MENU (dark themed)
+   ============================================================ */
+#mobile-menu-sidebar {
+  background: linear-gradient(to bottom, #140c1e, #0e0914) !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+#toast-container {
+  z-index: 9999;
+}
+
+/* ============================================================
+   UTILITY OVERRIDES (dark theme)
+   ============================================================ */
+
+/* Make Tailwind's bg-white → dark card in dark context */
+.dark-section {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+/* Dropdown menu stays light (it slides over dark bg) */
+.dropdown-light {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}

@@ -1,0 +1,77 @@
+<!-- ============================================================
+     YASAL BİLGİLER VE METİNLER (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+{% assign doc_key = 'rules' %}
+{% assign doc_title = 'Kurallar' %}
+{% assign doc_desc = 'Sunucumuzda oynarken uymanız gereken genel kurallar.' %}
+
+{% if request.path contains 'privacy-policy' %}
+  {% assign doc_key = 'privacy_policy' %}
+  {% assign doc_title = 'Gizlilik Politikası' %}
+  {% assign doc_desc = 'Kişisel verilerinizi nasıl topladığımızı ve kullandığımızı öğrenin.' %}
+{% elsif request.path contains 'terms' %}
+  {% assign doc_key = 'terms_of_service' %}
+  {% assign doc_title = 'Kullanım Şartları' %}
+  {% assign doc_desc = 'Hizmetlerimizi kullanırken uymanız gereken şartları ve koşulları öğrenin.' %}
+{% endif %}
+
+{% assign content = legalDocs[doc_key] %}
+
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">{{ doc_title }}</span>
+  </div>
+
+  <div class="max-w-4xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="text-center space-y-3 mb-8">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto shadow-xl border"
+           style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight" style="color: #ffffff !important;">{{ doc_title }}</h1>
+      <p class="text-sm text-gray-300 font-medium max-w-lg mx-auto">{{ doc_desc }}</p>
+    </div>
+
+    <!-- Content -->
+    <div
+      class="rounded-3xl border-2 shadow-2xl p-6 sm:p-12 backdrop-blur-xl"
+      style="
+        background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+      "
+    >
+      {% if content %}
+        <div class="prose prose-invert prose-base max-w-none text-gray-200 font-medium leading-relaxed prose-headings:text-white prose-a:text-purple-400 hover:prose-a:text-purple-300">
+          {{ content | lexical_html }}
+        </div>
+      {% else %}
+        <div class="flex flex-col items-center justify-center py-12 text-center">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border"
+               style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-black text-white mb-1" style="color: #ffffff !important;">İçerik Bulunamadı</h3>
+          <p class="text-xs text-gray-400 font-medium">Bu yasal doküman henüz sisteme eklenmemiş veya şu anda erişilemiyor.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

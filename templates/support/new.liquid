@@ -1,0 +1,353 @@
+<!-- ============================================================
+     YENİ DESTEK TALEBİ (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <a href="/support" class="hover:text-primary transition-colors" style="color: #cbd5e1;">Destek Merkezi</a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Yeni Talep</span>
+  </div>
+
+  {% if customer %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- SOL: Kullanıcı Bilgisi & Önemli Not (4 Cols) -->
+      <aside class="lg:col-span-4 space-y-6">
+        <!-- User Info -->
+        <div
+          class="rounded-3xl border-2 shadow-2xl p-6 backdrop-blur-xl"
+          style="
+            background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+          "
+        >
+          <div class="flex items-center gap-4 mb-4">
+            <img
+              src="https://mc-heads.net/avatar/{{ customer.username }}/48"
+              class="w-12 h-12 rounded-2xl border-2 border-primary/40 shadow-lg"
+              alt=""
+            >
+            <div>
+              <div class="font-black text-white text-base" style="color: #ffffff !important;">{{ customer.username }}</div>
+              <div class="text-xs font-semibold text-purple-300">Oyuncu</div>
+            </div>
+          </div>
+          <a
+            href="/profile"
+            class="w-full block text-center py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white border border-white/10 hover:border-primary/40 transition-all"
+            style="background: rgba(255, 255, 255, 0.05);"
+          >
+            Profile Git
+          </a>
+        </div>
+
+        <!-- Info Box -->
+        <div
+          class="rounded-3xl border-2 shadow-2xl p-6 backdrop-blur-xl space-y-3"
+          style="
+            background: linear-gradient(135deg, rgba(28, 16, 38, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+          "
+        >
+          <h4 class="font-black text-white text-sm flex items-center gap-2" style="color: #ffffff !important;">
+            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Önemli Bilgilendirme</span>
+          </h4>
+          <p class="text-xs text-gray-300 leading-relaxed font-medium">
+            Destek taleplerinize ortalama <span class="font-black text-purple-300">12-24 saat</span> içerisinde dönüş yapılmaktadır. Lütfen gereksiz veya art arda talep oluşturmaktan kaçının.
+          </p>
+        </div>
+      </aside>
+
+      <!-- SAĞ: Talep Formu (8 Cols) -->
+      <main class="lg:col-span-8">
+        <div
+          class="rounded-3xl border-2 shadow-2xl overflow-hidden backdrop-blur-xl"
+          style="
+            background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+          "
+        >
+          <div class="p-6 sm:p-8 border-b" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <h1 class="text-xl sm:text-2xl font-black text-white flex items-center gap-3" style="color: #ffffff !important;">
+              <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              </div>
+              <span>Yeni Destek Talebi Oluştur</span>
+            </h1>
+            <p class="text-gray-400 mt-1 text-xs">Destek ekibimiz en kısa sürede size yardımcı olmak için burada.</p>
+          </div>
+
+          <form id="createTicketForm" class="p-6 sm:p-8 space-y-6">
+            <div>
+              <label class="block text-xs font-black uppercase tracking-wider text-purple-300 mb-2">Konu (Başlık)</label>
+              <input
+                type="text"
+                name="title"
+                required
+                placeholder="Sorununuzu kısaca özetleyin..."
+                class="w-full px-4 py-3.5 rounded-2xl border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-white text-sm placeholder:text-gray-500 shadow-inner"
+                style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black uppercase tracking-wider text-purple-300 mb-2">Kategori</label>
+              <div class="relative">
+                <select
+                  name="categoryId"
+                  required
+                  class="w-full px-4 py-3.5 rounded-2xl border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-white text-sm shadow-inner appearance-none cursor-pointer"
+                  style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+                >
+                  <option value="" disabled selected class="text-gray-500 bg-[#120a18]">Lütfen bir kategori seçin</option>
+                  {% for cat in ticketCategories %}
+                    <option value="{{ cat.id | default: cat._id }}" class="text-white bg-[#120a18]">{{ cat.name }}</option>
+                  {% endfor %}
+                </select>
+                <svg
+                  class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black uppercase tracking-wider text-purple-300 mb-2">Detaylı Açıklama</label>
+              <div
+                class="rounded-2xl border-2 overflow-hidden flex flex-col shadow-inner"
+                style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+              >
+                <!-- Toolbar -->
+                <div class="flex flex-wrap items-center gap-1 p-2.5 border-b" style="background: rgba(20, 12, 28, 0.8); border-color: rgba(255, 255, 255, 0.08);">
+                  <button type="button" id="bold-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Kalın">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"/></svg>
+                  </button>
+                  <button type="button" id="italic-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="İtalik">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 20l4-16m4 4l-4 16M6 16l4-16"/></svg>
+                  </button>
+                  <button type="button" id="underline-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Altı Çizili">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3m-6 18h6"/></svg>
+                  </button>
+                  <button type="button" id="strike-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Üstü Çizili">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 12h14M8 6h8a2 2 0 010 4H8a2 2 0 010-4zM8 14h8a2 2 0 000 4H8a2 2 0 000-4z"/></svg>
+                  </button>
+                  <div class="w-px h-5 mx-1" style="background: rgba(255, 255, 255, 0.1);"></div>
+                  <button type="button" id="left-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Sola Hizala">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"/></svg>
+                  </button>
+                  <button type="button" id="center-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Ortala">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M4 18h16"/></svg>
+                  </button>
+                  <button type="button" id="right-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Sağa Hizala">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M4 18h16"/></svg>
+                  </button>
+                </div>
+                <!-- Editor Input -->
+                <div
+                  id="lexical-editor"
+                  class="min-h-[180px] p-5 outline-none text-sm text-white font-sans cursor-text"
+                  contenteditable="true"
+                ></div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+              <button
+                type="submit"
+                class="px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20 cursor-pointer flex items-center justify-center gap-2"
+                style="
+                  background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                  box-shadow: 0 10px 30px rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+                "
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+                <span>Talebi Gönder</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+
+    <style>
+      .editor-text-bold { font-weight: bold; }
+      .editor-text-italic { font-style: italic; }
+      .editor-text-underline { text-decoration: underline; }
+      .editor-text-strikethrough { text-decoration: line-through; }
+      .editor-text-underlineStrikethrough { text-decoration: underline line-through; }
+    </style>
+
+    <script type="module">
+      import { createEditor, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND } from 'https://esm.sh/lexical@0.14.5';
+      import { registerRichText } from 'https://esm.sh/@lexical/rich-text@0.14.5';
+
+      window.lexicalContentJSON = null;
+
+      const myTheme = {
+        text: {
+          bold: 'editor-text-bold',
+          italic: 'editor-text-italic',
+          underline: 'editor-text-underline',
+          strikethrough: 'editor-text-strikethrough',
+          underlineStrikethrough: 'editor-text-underlineStrikethrough',
+        },
+      };
+
+      const config = {
+        namespace: 'SupportNewTicket',
+        theme: myTheme,
+        onError: (error) => {
+          console.error('Lexical Hatası:', error);
+        },
+      };
+
+      const editor = createEditor(config);
+      const editorElement = document.getElementById('lexical-editor');
+
+      if (editorElement) {
+        editor.setRootElement(editorElement);
+        registerRichText(editor);
+
+        document.getElementById('bold-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+        });
+        document.getElementById('italic-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+        });
+        document.getElementById('underline-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+        });
+        document.getElementById('strike-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+        });
+
+        document.getElementById('left-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+        });
+        document.getElementById('center-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+        });
+        document.getElementById('right-btn')?.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
+        });
+
+        editor.registerUpdateListener(({ editorState }) => {
+          editorState.read(() => {
+            window.lexicalContentJSON = editorState.toJSON();
+          });
+        });
+
+        document.getElementById('createTicketForm')?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          if (!window.lexicalContentJSON || !window.lexicalContentJSON.root.children.length) {
+            window.showToast?.('Lütfen bir açıklama girin.', 'error');
+            return;
+          }
+
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = '<div class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></div> <span>Gönderiliyor...</span>';
+
+          const formData = new FormData(e.target);
+
+          const data = {
+            title: formData.get('title'),
+            categoryId: formData.get('categoryId'),
+            message: window.lexicalContentJSON,
+          };
+
+          try {
+            const res = await fetch('/api/storefront/v2/tickets', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+            const result = await res.json();
+
+            if (result.success || res.ok) {
+              window.showToast?.('Destek talebiniz başarıyla oluşturuldu!', 'success');
+              window.location.href = '/support';
+            } else {
+              window.showToast?.(result.message || 'Bir hata oluştu.', 'error');
+              btn.disabled = false;
+              btn.innerHTML = originalText;
+            }
+          } catch (err) {
+            window.showToast?.('Bağlantı hatası.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+        });
+      }
+    </script>
+  {% else %}
+    <div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-16 min-h-[60vh] flex items-center justify-center">
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-10 max-w-lg w-full text-center backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div
+          class="w-20 h-20 mx-auto rounded-3xl flex items-center justify-center mb-6 shadow-2xl border"
+          style="
+            background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+            color: var(--color-primary);
+          "
+        >
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mb-2" style="color: #ffffff !important;">Giriş Yapmalısınız</h2>
+        <p class="text-xs sm:text-sm font-medium text-gray-300 mb-8 max-w-md mx-auto">
+          Yeni bir destek talebi oluşturmak için lütfen hesabınıza giriş yapın.
+        </p>
+        <a
+          href="/auth/sign-in?return=/support/new"
+          class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 border border-white/20"
+          style="
+            background: linear-gradient(135deg, var(--color-primary), #9333ea);
+            box-shadow: 0 10px 30px rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+          "
+        >
+          Giriş Yap
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>

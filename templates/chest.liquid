@@ -1,0 +1,278 @@
+<!-- ============================================================
+     SANDIĞIM (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/store" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+      </svg>
+      <span>Mağaza</span>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Sandığım</span>
+  </div>
+
+  {% if customer %}
+    {% assign total = chestItems.size %}
+    {% assign used = 0 %}
+    {% for item in chestItems %}
+      {% if item.used %}
+        {% assign used = used | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% assign available = total | minus: used %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- SOL: Eşyalar Container (8 Cols) -->
+      <div
+        class="lg:col-span-8 rounded-3xl border-2 shadow-2xl p-6 sm:p-8 backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="flex items-center justify-between mb-8 pb-6 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40 shadow-lg">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-white" style="color: #ffffff !important;">Eşyalarım</h2>
+              <p class="text-xs text-gray-400 font-medium">Mağazadan aldığınız veya kazandığınız ürünler</p>
+            </div>
+          </div>
+          <span class="px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider text-purple-300 border border-primary/30"
+                style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.18);">
+            {{ total }} Eşya
+          </span>
+        </div>
+
+        {% if total == 0 %}
+          <div id="chest-empty" class="text-center py-16 flex flex-col items-center justify-center">
+            <div
+              class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl border"
+              style="
+                background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+                color: var(--color-primary);
+              "
+            >
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white mb-2" style="color: #ffffff !important;">Sandığınız Boş</h3>
+            <p class="text-xs sm:text-sm font-medium text-gray-300 mb-8 max-w-md">
+              Henüz sandığınızda aktif bir eşya bulunmuyor. Mağazadan dilediğiniz ürünleri alarak sandığınızı doldurabilirsiniz.
+            </p>
+            <a
+              href="/store"
+              class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
+              style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              </svg>
+              <span>Mağazaya Git</span>
+            </a>
+          </div>
+        {% else %}
+          <div id="chest-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% for item in chestItems %}
+              <div
+                class="relative rounded-3xl border-2 overflow-hidden transition-all duration-300 group flex flex-col h-full shadow-xl hover:border-primary/60 {% if item.used %}opacity-50 grayscale{% endif %}"
+                style="
+                  background: linear-gradient(135deg, rgba(20, 12, 28, 0.9), rgba(14, 9, 20, 0.9));
+                  border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+                "
+              >
+                {% if item.used %}
+                  <div class="absolute top-3 left-3 z-10 bg-red-600/90 border border-red-400/40 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-xl shadow-md">
+                    Kullanılmış
+                  </div>
+                {% endif %}
+
+                <div
+                  class="w-full aspect-square flex items-center justify-center p-6 border-b relative overflow-hidden"
+                  style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.06);"
+                >
+                  <div
+                    class="absolute inset-0 rounded-full blur-2xl opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+                    style="background-color: var(--color-primary);"
+                  ></div>
+                  <img
+                    src="{{ item.product.image | default: 'https://via.placeholder.com/150?text=No+Image' }}"
+                    alt="{{ item.product.name }}"
+                    class="w-full h-full object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-300 relative z-10"
+                  >
+                </div>
+
+                <div class="p-5 flex-1 flex flex-col justify-between gap-4">
+                  <div>
+                    <h3 class="text-base font-black text-white mb-1.5 line-clamp-2 leading-snug" style="color: #ffffff !important;">
+                      {{ item.product.name | default: 'Bilinmeyen Eşya' }}
+                    </h3>
+                    {% if item.product.description %}
+                      <p class="text-xs text-gray-400 font-medium line-clamp-2">{{ item.product.description }}</p>
+                    {% endif %}
+                  </div>
+
+                  <div class="pt-2">
+                    {% if item.used %}
+                      <button
+                        disabled
+                        class="w-full py-3 rounded-2xl font-bold text-xs uppercase tracking-wider text-gray-500 border border-white/5 cursor-not-allowed text-center"
+                        style="background: rgba(255, 255, 255, 0.05);"
+                      >
+                        Kullanılmış
+                      </button>
+                    {% else %}
+                      <button
+                        id="use-btn-{{ item.id }}"
+                        onclick="useItem('{{ item.id }}', this)"
+                        class="w-full py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 border border-emerald-400/30 cursor-pointer"
+                        style="background: linear-gradient(135deg, #059669, #10b981);"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <span>Kullan</span>
+                      </button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- SAĞ: İstatistikler Sidebar (4 Cols) -->
+      <div class="lg:col-span-4 space-y-6">
+        <div
+          class="rounded-3xl border-2 shadow-2xl p-6 sm:p-7 backdrop-blur-xl sticky top-24"
+          style="
+            background: linear-gradient(135deg, rgba(28, 16, 38, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+          "
+        >
+          <h2 class="text-lg sm:text-xl font-black text-white mb-6 flex items-center gap-2.5 pb-4 border-b" style="color: #ffffff !important; border-color: rgba(255, 255, 255, 0.08);">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <span>Sandık İstatistikleri</span>
+          </h2>
+
+          <div class="space-y-4">
+            <!-- Toplam Eşya -->
+            <div
+              class="rounded-2xl p-4 flex items-center justify-between border-2 transition-all hover:scale-[1.02]"
+              style="background: rgba(124, 58, 237, 0.12); border-color: rgba(124, 58, 237, 0.35);"
+            >
+              <div>
+                <p class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">Toplam Eşya</p>
+                <p class="text-2xl font-black text-white" style="color: #ffffff !important;">{{ total }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Kullanılabilir -->
+            <div
+              class="rounded-2xl p-4 flex items-center justify-between border-2 transition-all hover:scale-[1.02]"
+              style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35);"
+            >
+              <div>
+                <p class="text-[10px] font-black text-emerald-300 uppercase tracking-wider mb-1">Kullanılabilir</p>
+                <p class="text-2xl font-black text-emerald-400">{{ available }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Kullanılmış -->
+            <div
+              class="rounded-2xl p-4 flex items-center justify-between border-2 transition-all hover:scale-[1.02]"
+              style="background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1);"
+            >
+              <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">Kullanılmış</p>
+                <p class="text-2xl font-black text-gray-300">{{ used }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-white/5 text-gray-400 border border-white/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const customerId = '{{ customer.id | default: customer._id }}';
+      let useTimeouts = {};
+
+      async function useItem(itemId, btn) {
+        if (!btn.classList.contains('confirm-mode')) {
+          const ogText = btn.innerHTML;
+          btn.dataset.ogText = ogText;
+          btn.classList.add('confirm-mode');
+          btn.style.background = 'linear-gradient(135deg, #d97706, #f59e0b)';
+          btn.innerHTML = `<svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> <span>Emin misin?</span>`;
+
+          useTimeouts[itemId] = setTimeout(() => {
+            btn.classList.remove('confirm-mode');
+            btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+            btn.innerHTML = btn.dataset.ogText;
+          }, 3000);
+          return;
+        }
+
+        clearTimeout(useTimeouts[itemId]);
+        btn.disabled = true;
+        btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></div> <span>Kullanılıyor...</span>`;
+
+        try {
+          const res = await fetch(`/api/storefront/v1/chest/${customerId}/use/${itemId}`, { method: 'POST' });
+          const data = await res.json();
+          if (res.ok || data.success) {
+            window.showToast?.('Eşya başarıyla kullanıldı!', 'success');
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            throw new Error(data.message || 'Kullanım hatası');
+          }
+        } catch (e) {
+          window.showToast?.(e.message, 'error');
+          btn.disabled = false;
+          btn.classList.remove('confirm-mode');
+          btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+          btn.innerHTML = btn.dataset.ogText;
+        }
+      }
+    </script>
+  {% else %}
+    <script>
+      window.location.href = '/auth/login?return=/chest';
+    </script>
+  {% endif %}
+</div>

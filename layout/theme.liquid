@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ content_for_header }}
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --color-primary: {{ settings.colors.primary | default: '#7c3aed' }};
+        --color-secondary: {{ settings.colors.secondary | default: '#9333ea' }};
+        --color-bg: {{ settings.colors.background | default: '#0e0914' }};
+        --color-surface: {{ settings.colors.surface | default: '#1a1020' }};
+        --color-border: {{ settings.colors.border | default: 'rgba(124, 58, 237, 0.25)' }};
+        --color-text-primary: {{ settings.colors.text_primary | default: '#ffffff' }};
+        --color-text-secondary: {{ settings.colors.text_secondary | default: '#cbd5e1' }};
+        --color-primary-rgb: 124, 58, 237;
+        /* Aliases */
+        --text-primary: var(--color-text-primary);
+        --text-secondary: var(--color-text-secondary);
+        --text-muted: #7a6e8a;
+        --bg-base: var(--color-bg);
+        --bg-card: var(--color-surface);
+        --bg-card-hover: #1f1428;
+        --bg-card-elevated: #241830;
+        --border: var(--color-border);
+        --accent: var(--color-primary);
+      }
+    </style>
+    <script>
+      (function() {
+        function hexToRgb(hex) {
+          if (!hex) return '124, 58, 237';
+          hex = hex.replace('#', '').trim();
+          if (hex.length === 3) {
+            hex = hex.split('').map(c => c + c).join('');
+          }
+          if (hex.length === 6) {
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            return !isNaN(r) && !isNaN(g) && !isNaN(b) ? `${r}, ${g}, ${b}` : '124, 58, 237';
+          }
+          return '124, 58, 237';
+        }
+        const primaryHex = "{{ settings.colors.primary | default: '#7c3aed' }}";
+        document.documentElement.style.setProperty('--color-primary-rgb', hexToRgb(primaryHex));
+      })();
+    </script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: 'rgb(var(--color-primary-rgb) / <alpha-value>)',
+              secondary: 'var(--color-secondary)',
+              card: 'var(--color-surface)',
+              base: 'var(--color-bg)',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Rajdhani', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{ 'assets/style.css' | asset_url }}">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- NProgress for smooth page transitions -->
+    <link rel="stylesheet" href="https://unpkg.com/nprogress@0.2.0/nprogress.css">
+    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+    <style>
+      #nprogress .bar {
+        background: var(--color-primary) !important;
+        height: 3px !important;
+      }
+      #nprogress .peg {
+        box-shadow: 0 0 10px var(--color-primary), 0 0 5px var(--color-primary) !important;
+      }
+      #nprogress .spinner {
+        display: none !important;
+      }
+
+      /* MPA View Transitions */
+      @view-transition {
+        navigation: auto;
+      }
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fade-out {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+      ::view-transition-old(root) {
+        animation: 200ms ease-out both fade-out;
+      }
+      ::view-transition-new(root) {
+        animation: 200ms ease-out both fade-in;
+      }
+
+      /* Marquee Animation */
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* Levitate Animation */
+      @keyframes levitate {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-24px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+      .animate-levitate {
+        animation: levitate 4s ease-in-out infinite;
+      }
+    </style>
+
+    {% if settings.integrations.google_analytics_id != blank %}
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id={{ settings.integrations.google_analytics_id }}"
+      ></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '{{ settings.integrations.google_analytics_id }}');
+      </script>
+    {% endif %}
+  </head>
+
+  <body
+    class="flex flex-col min-h-screen antialiased selection:bg-primary selection:text-white"
+    style="background-color: var(--color-bg); color: var(--color-text-primary);"
+  >
+    {% unless template == 'auth' or template contains 'auth/' or template == 'errors/maintenance' %}
+      <!--
+        ============================================================
+        HERO HEADER & CYBER-HUD NAVBAR (Dark Luxury Purpy Remastered)
+        ============================================================
+      -->
+      <header class="relative w-full overflow-hidden pb-12 sm:pb-16">
+        <!-- Background Wallpaper & Cinematic Lighting -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <img
+            src="{% if settings.header.banner %}{{ settings.header.banner }}{% else %}https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=2070&auto=format&fit=crop{% endif %}"
+            alt="Hero Background"
+            class="w-full h-[520px] object-cover blur-[2px] opacity-30 scale-105"
+          >
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0e0914]/40 via-[#0e0914]/80 to-[#0e0914]"></div>
+          <!-- Ambient Glow Spheres -->
+          <div class="absolute -top-20 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none" style="background: var(--color-primary);"></div>
+          <div class="absolute -top-20 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-15 pointer-events-none" style="background: #ec4899;"></div>
+        </div>
+
+        <div class="relative z-20">
+          <!-- Hero Banner Top: Status, Logo & Discord (3-Column Layout) -->
+          <div class="relative w-full max-w-[1350px] mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-12 sm:pb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+              <!-- Left HUD Card: Server IP & Live Player Status -->
+              <div class="hidden lg:flex justify-start items-center">
+                <div
+                  onclick="copyIp('{{ settings.server_ip | default: 'mc.hypixel.net' }}')"
+                  class="flex items-center gap-3.5 p-3.5 px-5 rounded-2xl border-2 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:scale-105 hover:border-primary cursor-pointer select-none group"
+                  style="
+                    background: linear-gradient(135deg, rgba(26, 16, 32, 0.90), rgba(18, 10, 24, 0.90));
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+                  "
+                  title="Sunucu adresini kopyalamak için tıklayın"
+                >
+                  <div
+                    class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg border transition-transform group-hover:scale-110"
+                    style="
+                      background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+                      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+                      color: var(--color-primary);
+                    "
+                  >
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <div class="flex flex-col text-left">
+                    <span class="text-sm font-black text-white tracking-wide leading-tight group-hover:text-primary transition-colors" style="color: #ffffff !important;">
+                      {{ settings.server_ip | default: 'mc.hypixel.net' }}
+                    </span>
+                    <div class="flex items-center gap-1.5 mt-1">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span class="server-player-count text-xs font-bold text-gray-300">
+                        {% if statistics.onlinePlayers -%}
+                          {{- statistics.onlinePlayers }} Oyuncu Aktif
+                        {%- else -%}
+                          Aktif
+                        {%- endif %}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Center: Majestic Levitating Logo -->
+              <div class="flex justify-center items-center w-full">
+                <div class="relative z-40 animate-levitate flex items-center justify-center w-full">
+                  <!-- Aura Behind Logo -->
+                  <div class="absolute w-48 sm:w-64 h-48 sm:h-64 rounded-full blur-3xl opacity-30 pointer-events-none" style="background: var(--color-primary);"></div>
+                  <a
+                    href="/"
+                    class="relative z-10 flex items-center justify-center w-full max-w-[240px] sm:max-w-[280px] md:max-w-[340px] lg:max-w-[380px] transition-transform duration-300 hover:scale-105"
+                  >
+                    {% assign default_logo = 'https://avatars.githubusercontent.com/u/3840546?s=280&v=4' %}
+                    <img
+                      src="{{ settings.logo_light | default: default_logo }}"
+                      alt="{{ shop.name }}"
+                      class="h-auto w-full object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
+                      style="image-rendering: crisp-edges; max-height: 220px;"
+                    >
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right HUD Card: Discord Community -->
+              <div class="hidden lg:flex justify-end items-center">
+                <a
+                  href="{{ settings.discord_url | default: '#' }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center gap-3.5 p-3.5 px-5 rounded-2xl border-2 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:scale-105 hover:border-[#5865F2] cursor-pointer select-none group"
+                  style="
+                    background: linear-gradient(135deg, rgba(26, 16, 32, 0.90), rgba(18, 10, 24, 0.90));
+                    border-color: rgba(88, 101, 242, 0.35);
+                  "
+                >
+                  <div class="flex flex-col text-right">
+                    <span class="text-sm font-black text-white tracking-wide leading-tight group-hover:text-[#5865F2] transition-colors" style="color: #ffffff !important;">
+                      Discord Topluluğu
+                    </span>
+                    <div class="flex items-center justify-end gap-1.5 mt-1">
+                      <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                      <span
+                        class="discord-live-count text-xs font-bold text-gray-300"
+                        data-format="{count} Üye Çevrimiçi"
+                      >
+                        Topluluğa Katıl
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg border transition-transform group-hover:scale-110"
+                    style="
+                      background: rgba(88, 101, 242, 0.20);
+                      border-color: rgba(88, 101, 242, 0.45);
+                      color: #5865F2;
+                    "
+                  >
+                    <i class="fa-brands fa-discord text-2xl leading-none" style="color: #5865F2;"></i>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!--
+            ============================================================
+            FLOATING LUXURY CYBER-HUD NAVBAR BAR
+            ============================================================
+          -->
+          <div class="w-full max-w-[1300px] mx-auto px-4 sm:px-6 relative z-40">
+            <div
+              class="relative rounded-3xl p-3 sm:p-4 px-4 sm:px-6 border-2 shadow-2xl backdrop-blur-2xl overflow-hidden flex items-center justify-between gap-4"
+              style="
+                background: linear-gradient(135deg, rgba(28, 16, 38, 0.95), rgba(18, 10, 24, 0.95));
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+                box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+              "
+            >
+              <!-- Ambient Top Highlight -->
+              <div class="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-80"></div>
+
+              <!-- Left: Direct Navigation Pills -->
+              <nav class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                {% if settings.nav_links != blank and settings.nav_links.size > 0 %}
+                  {% for link in settings.nav_links %}
+                    {% assign is_active = false %}
+                    {% if link.url == '/' %}
+                      {% if request.path == '/' or request.path == blank %}
+                        {% assign is_active = true %}
+                      {% endif %}
+                    {% elsif request.path contains link.url %}
+                      {% assign is_active = true %}
+                    {% endif %}
+                    <a
+                      href="{{ link.url }}"
+                      class="px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-2 border {% if is_active %}text-white bg-primary shadow-lg shadow-primary/30 border-primary/60{% else %}text-gray-300 hover:text-white hover:bg-white/5 border-transparent hover:border-white/10{% endif %}"
+                      {% if link.new_tab %}target="_blank"{% endif %}
+                    >
+                      <span>{{ link.title }}</span>
+                    </a>
+                  {% endfor %}
+                {% else %}
+                  <a
+                    href="/"
+                    class="px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-2 border {% if request.path == '/' or request.path == blank %}text-white bg-primary shadow-lg shadow-primary/30 border-primary/60{% else %}text-gray-300 hover:text-white hover:bg-white/5 border-transparent hover:border-white/10{% endif %}"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>Ana Sayfa</span>
+                  </a>
+                  <a
+                    href="/store"
+                    class="px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-2 border {% if request.path contains '/store' %}text-white bg-primary shadow-lg shadow-primary/30 border-primary/60{% else %}text-gray-300 hover:text-white hover:bg-white/5 border-transparent hover:border-white/10{% endif %}"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    <span>Mağaza</span>
+                  </a>
+                  <a
+                    href="/support"
+                    class="px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-2 border {% if request.path contains '/support' %}text-white bg-primary shadow-lg shadow-primary/30 border-primary/60{% else %}text-gray-300 hover:text-white hover:bg-white/5 border-transparent hover:border-white/10{% endif %}"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <span>Destek</span>
+                  </a>
+                {% endif %}
+              </nav>
+
+              <!-- Right: Cart & User Account Actions -->
+              <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Sepet Button -->
+                <a
+                  href="/cart"
+                  id="nav-cart-btn"
+                  class="relative text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 border-2 hover:scale-105 outline-none h-12 cursor-pointer shadow-xl"
+                  style="
+                    background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 124, 58, 237), 0.25), rgba(147, 51, 234, 0.15));
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.40);
+                    color: #ffffff !important;
+                  "
+                >
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  <span>Sepet</span>
+                  <span class="header-cart-badge hidden absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow"
+                    >0</span
+                  >
+                </a>
+
+                <!-- User / Auth Action Button -->
+                {% if customer %}
+                  <div class="relative">
+                    <button
+                      type="button"
+                      id="nav-user-btn"
+                      class="relative text-white px-3 sm:px-4 py-2 rounded-2xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2.5 border-2 hover:scale-105 outline-none h-12 cursor-pointer shadow-xl"
+                      style="
+                        background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                        border-color: rgba(255, 255, 255, 0.25);
+                      "
+                      onclick="toggleUserMenu()"
+                    >
+                      <div class="relative w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-white/30">
+                        <img
+                          src="https://mc-heads.net/avatar/{{ customer.username }}/32"
+                          alt="{{ customer.username }}"
+                          class="w-full h-full object-cover"
+                        >
+                      </div>
+                      <span class="hidden sm:inline font-black uppercase tracking-wider text-xs whitespace-nowrap">{{ customer.username }}</span>
+                      <svg class="w-4 h-4 hidden sm:block text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+                  </div>
+                {% else %}
+                  <a
+                    href="/auth/login"
+                    class="relative text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 border shadow-xl hover:scale-105 outline-none h-12 cursor-pointer"
+                    style="
+                      background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                      border-color: rgba(255, 255, 255, 0.25);
+                    "
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span class="whitespace-nowrap">Giriş Yap</span>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-menu-overlay"
+        class="fixed inset-0 z-[60] opacity-0 pointer-events-none transition-opacity duration-300"
+        style="background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);"
+        onclick="toggleMobileMenu()"
+      ></div>
+
+      <!-- Mobile Menu Sidebar -->
+      <div
+        id="mobile-menu-sidebar"
+        class="fixed inset-y-0 left-0 z-[70] w-full sm:w-[400px] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col"
+        style="background: linear-gradient(to bottom, #140c1e, #0e0914); border-right: 2px solid rgba(var(--color-primary-rgb,124,58,237),0.25);"
+      >
+        <!-- Sidebar Üst: Logo + Kapat -->
+        <div
+          class="flex items-center justify-between p-6 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent"
+          style="border-bottom: 2px solid rgba(var(--color-primary-rgb,124,58,237),0.25);"
+        >
+          <h2 class="text-2xl sm:text-3xl font-bold text-white">Menü</h2>
+          <button
+            onclick="toggleMobileMenu()"
+            class="w-10 h-10 flex items-center justify-center rounded-xl transition-all"
+            style="color: rgba(255,255,255,0.8);"
+            onmouseover="this.style.background='rgba(var(--color-primary-rgb,124,58,237),0.2)'; this.style.transform='rotate(90deg)';"
+            onmouseout="this.style.background='transparent'; this.style.transform='rotate(0deg)';"
+            aria-label="Kapat"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Navigasyon Linkleri -->
+        <div class="flex-1 overflow-y-auto p-6">
+          <nav class="space-y-3">
+            {% if settings.nav_links != blank %}
+              {% for link in settings.nav_links %}
+                {% assign is_active = false %}
+                {% if link.url == '/' %}
+                  {% if request.path == '/' or request.path == blank %}
+                    {% assign is_active = true %}
+                  {% endif %}
+                {% elsif request.path contains link.url %}
+                  {% assign is_active = true %}
+                {% endif %}
+                <a
+                  href="{{ link.url }}"
+                  onclick="toggleMobileMenu()"
+                  class="flex items-center gap-4 px-4 py-4 rounded-2xl font-semibold transition-all duration-200"
+                  style="
+                    color: {% if is_active %}var(--color-primary){% else %}rgba(255,255,255,0.8){% endif %};
+                    background: {% if is_active %}rgba(var(--color-primary-rgb,124,58,237),0.15){% else %}transparent{% endif %};
+                    border: 2px solid {% if is_active %}rgba(var(--color-primary-rgb,124,58,237),0.3){% else %}transparent{% endif %};
+                  "
+                  onmouseover="this.style.background='rgba(var(--color-primary-rgb,124,58,237),0.1)'; this.style.color='var(--color-primary)'; this.style.transform='translateX(4px)';"
+                  onmouseout="this.style.background='{% if is_active %}rgba(var(--color-primary-rgb,124,58,237),0.15){% else %}transparent{% endif %}'; this.style.color='{% if is_active %}var(--color-primary){% else %}rgba(255,255,255,0.8){% endif %}'; this.style.transform='translateX(0)';"
+                >
+                  <div
+                    class="flex items-center justify-center w-12 h-12 rounded-xl"
+                    style="background: rgba(var(--color-primary-rgb,124,58,237),0.15); color: var(--color-primary);"
+                  >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </div>
+                  <span class="text-lg">{{ link.title }}</span>
+                </a>
+              {% endfor %}
+            {% else %}
+              <a
+                href="/"
+                onclick="toggleMobileMenu()"
+                class="flex items-center gap-4 px-4 py-4 rounded-2xl font-semibold transition-all duration-200"
+                style="color: rgba(255,255,255,0.8);"
+                onmouseover="this.style.background='rgba(var(--color-primary-rgb,124,58,237),0.1)'; this.style.color='var(--color-primary)'; this.style.transform='translateX(4px)';"
+                onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'; this.style.transform='translateX(0)';"
+              >
+                <div
+                  class="flex items-center justify-center w-12 h-12 rounded-xl"
+                  style="background: rgba(var(--color-primary-rgb,124,58,237),0.15); color: var(--color-primary);"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                  </svg>
+                </div>
+                <span class="text-lg">Ana Sayfa</span>
+              </a>
+              <a
+                href="/store"
+                onclick="toggleMobileMenu()"
+                class="flex items-center gap-4 px-4 py-4 rounded-2xl font-semibold transition-all duration-200"
+                style="color: rgba(255,255,255,0.8);"
+                onmouseover="this.style.background='rgba(var(--color-primary-rgb,124,58,237),0.1)'; this.style.color='var(--color-primary)'; this.style.transform='translateX(4px)';"
+                onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'; this.style.transform='translateX(0)';"
+              >
+                <div
+                  class="flex items-center justify-center w-12 h-12 rounded-xl"
+                  style="background: rgba(var(--color-primary-rgb,124,58,237),0.15); color: var(--color-primary);"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                  </svg>
+                </div>
+                <span class="text-lg">Mağaza</span>
+              </a>
+              <a
+                href="/forum"
+                onclick="toggleMobileMenu()"
+                class="flex items-center gap-4 px-4 py-4 rounded-2xl font-semibold transition-all duration-200"
+                style="color: rgba(255,255,255,0.8);"
+                onmouseover="this.style.background='rgba(var(--color-primary-rgb,124,58,237),0.1)'; this.style.color='var(--color-primary)'; this.style.transform='translateX(4px)';"
+                onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'; this.style.transform='translateX(0)';"
+              >
+                <div
+                  class="flex items-center justify-center w-12 h-12 rounded-xl"
+                  style="background: rgba(var(--color-primary-rgb,124,58,237),0.15); color: var(--color-primary);"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                  </svg>
+                </div>
+                <span class="text-lg">Forum</span>
+              </a>
+            {% endif %}
+          </nav>
+        </div>
+
+        <!-- Kullanıcı / Auth Bölümü -->
+        <div class="p-6" style="border-top: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02);">
+          {% if customer %}
+            <a
+              href="/profile"
+              class="flex items-center gap-4 p-4 rounded-2xl"
+              style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);"
+            >
+              <img
+                src="https://mc-heads.net/avatar/{{ customer.username }}/48"
+                class="w-12 h-12 rounded-full"
+                style="border: 2px solid rgba(var(--color-primary-rgb,124,58,237),0.3);"
+                alt=""
+              >
+              <div class="flex-grow">
+                <div class="font-black" style="color: var(--text-primary);">{{ customer.username }}</div>
+                <div class="text-xs font-bold" style="color: var(--text-muted);">
+                  Kredi: <span style="color: var(--color-primary);">{{ customer.balance | default: '0' }} ₺</span>
+                </div>
+              </div>
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style="color: rgba(255,255,255,0.3);"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          {% else %}
+            <div class="flex flex-col gap-3">
+              <a
+                href="/auth/sign-in"
+                class="flex items-center justify-center w-full py-3.5 font-bold rounded-2xl transition-all"
+                style="background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.1);"
+                >Giriş Yap</a
+              >
+              <a
+                href="/auth/sign-up"
+                class="flex items-center justify-center w-full py-3.5 text-white font-bold rounded-2xl hover:brightness-110 transition-all"
+                style="background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 70%, #000)); box-shadow: 0 4px 16px rgba(var(--color-primary-rgb,124,58,237),0.4);"
+                >Kayıt Ol</a
+              >
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ============================================================
+           USER MENU SLIDE-OVER DRAWER (Sağdan Sola Açılan Hesap Menüsü)
+           ============================================================ -->
+      <!-- User Menu Backdrop -->
+      <div
+        id="user-drawer-backdrop"
+        class="fixed inset-0 z-[9998] opacity-0 pointer-events-none transition-opacity duration-300"
+        style="background: rgba(0, 0, 0, 0.70); backdrop-filter: blur(6px);"
+        onclick="closeUserMenu()"
+      ></div>
+
+      <!-- User Menu Panel (Right Drawer) -->
+      <div
+        id="user-drawer"
+        class="fixed inset-y-0 right-0 z-[9999] w-full sm:w-[400px] shadow-2xl transform translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overflow-hidden"
+        style="
+          background: linear-gradient(180deg, #180e22 0%, #120a1c 50%, #0c0614 100%);
+          border-left: 2px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+          box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+        "
+      >
+        <!-- Header -->
+        <div
+          class="flex items-center justify-between p-6 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent"
+          style="border-bottom: 2px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);"
+        >
+          <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-wide text-white" style="color: #ffffff !important;">
+            Hesap Menüsü
+          </h2>
+          <button
+            type="button"
+            onclick="closeUserMenu()"
+            class="w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 hover:rotate-90 cursor-pointer"
+            style="color: rgba(255, 255, 255, 0.8);"
+            onmouseover="this.style.background='rgba(var(--color-primary-rgb, 124, 58, 237), 0.2)';"
+            onmouseout="this.style.background='transparent';"
+            aria-label="Kapat"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        {% if customer %}
+          <!-- User Info Card -->
+          <div
+            class="p-6 border-b"
+            style="
+              background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.08);
+              border-color: rgba(255, 255, 255, 0.08);
+            "
+          >
+            <div class="flex items-center space-x-4">
+              <div
+                class="relative w-16 h-16 rounded-2xl overflow-hidden border-2 shadow-lg flex-shrink-0"
+                style="background: rgba(14, 9, 20, 0.9); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.5);"
+              >
+                <img
+                  src="https://mc-heads.net/avatar/{{ customer.username | default: 'Steve' }}/64"
+                  alt="{{ customer.username }}"
+                  class="w-full h-full object-cover"
+                >
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-lg font-black text-white truncate" style="color: #ffffff !important;">
+                  {{ customer.username }}
+                </p>
+                <div class="flex items-center gap-2 mt-1">
+                  <span
+                    class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border"
+                    style="
+                      background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2);
+                      color: var(--color-primary);
+                      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+                    "
+                  >
+                    {{ customer.role.name | default: 'Oyuncu' }}
+                  </span>
+                  <span class="text-xs font-bold text-emerald-400">
+                    ₺{{ customer.balance | default: customer.credit | default: '0.00' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrollable Menu Content -->
+          <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- 2-Column Grid (2x2) -->
+            <div class="grid grid-cols-2 gap-3.5">
+              <!-- Profilim -->
+              <a href="/profile" onclick="closeUserMenu()" class="group block cursor-pointer">
+                <div
+                  class="h-28 flex flex-col items-center justify-center space-y-2 p-3 rounded-2xl border-2 transition-all duration-300 group-hover:scale-105"
+                  style="
+                    background: rgba(30, 19, 44, 0.85);
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+                  "
+                  onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)'; this.style.background='rgba(var(--color-primary-rgb, 124, 58, 237), 0.15)';"
+                  onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)'; this.style.background='rgba(30, 19, 44, 0.85)';"
+                >
+                  <svg class="h-8 w-8 transition-transform group-hover:scale-110" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span class="text-xs font-black text-white uppercase tracking-wider">Profilim</span>
+                </div>
+              </a>
+
+              <!-- Cüzdanım -->
+              <a href="/wallet" onclick="closeUserMenu()" class="group block cursor-pointer">
+                <div
+                  class="h-28 flex flex-col items-center justify-center space-y-2 p-3 rounded-2xl border-2 transition-all duration-300 group-hover:scale-105"
+                  style="
+                    background: rgba(30, 19, 44, 0.85);
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+                  "
+                  onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)'; this.style.background='rgba(var(--color-primary-rgb, 124, 58, 237), 0.15)';"
+                  onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)'; this.style.background='rgba(30, 19, 44, 0.85)';"
+                >
+                  <svg class="h-8 w-8 transition-transform group-hover:scale-110" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                  </svg>
+                  <span class="text-xs font-black text-white uppercase tracking-wider">Cüzdanım</span>
+                </div>
+              </a>
+
+              <!-- Sandığım -->
+              <a href="/chest" onclick="closeUserMenu()" class="group block cursor-pointer">
+                <div
+                  class="h-28 flex flex-col items-center justify-center space-y-2 p-3 rounded-2xl border-2 transition-all duration-300 group-hover:scale-105"
+                  style="
+                    background: rgba(30, 19, 44, 0.85);
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+                  "
+                  onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)'; this.style.background='rgba(var(--color-primary-rgb, 124, 58, 237), 0.15)';"
+                  onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)'; this.style.background='rgba(30, 19, 44, 0.85)';"
+                >
+                  <svg class="h-8 w-8 transition-transform group-hover:scale-110" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                  </svg>
+                  <span class="text-xs font-black text-white uppercase tracking-wider">Sandığım</span>
+                </div>
+              </a>
+
+              <!-- Ayarlar -->
+              <a href="/profile/settings" onclick="closeUserMenu()" class="group block cursor-pointer">
+                <div
+                  class="h-28 flex flex-col items-center justify-center space-y-2 p-3 rounded-2xl border-2 transition-all duration-300 group-hover:scale-105"
+                  style="
+                    background: rgba(30, 19, 44, 0.85);
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+                  "
+                  onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)'; this.style.background='rgba(var(--color-primary-rgb, 124, 58, 237), 0.15)';"
+                  onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.25)'; this.style.background='rgba(30, 19, 44, 0.85)';"
+                >
+                  <svg class="h-8 w-8 transition-transform group-hover:scale-110" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span class="text-xs font-black text-white uppercase tracking-wider">Ayarlar</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- Yönetim Paneli (Yetki Varsa) -->
+            {% if customer.role.permissions and customer.role.permissions.size > 0 %}
+              <a
+                href="https://app.crafter.net.tr/cms/auth?websiteId={{ customer.websiteId }}&accessToken={{ customer.access_token }}&refreshToken={{ customer.refresh_token }}"
+                target="_blank"
+                class="block mt-4"
+              >
+                <div
+                  class="flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all hover:scale-[1.02]"
+                  style="
+                    background: rgba(30, 19, 44, 0.95);
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+                  "
+                >
+                  <svg class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  <span class="text-xs font-black uppercase tracking-wider text-white">Yönetim Paneli</span>
+                </div>
+              </a>
+            {% endif %}
+          </div>
+
+          <!-- Logout Button at Bottom -->
+          <div class="p-6 border-t mt-auto" style="border-color: rgba(255, 255, 255, 0.08);">
+            <a
+              href="/auth/logout"
+              class="w-full h-12 rounded-2xl flex items-center justify-center gap-2 font-black text-xs uppercase tracking-wider text-white transition-all hover:scale-[1.02] shadow-lg cursor-pointer"
+              style="background: #e11d48;"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              <span>Çıkış Yap</span>
+            </a>
+          </div>
+        {% else %}
+          <!-- Giriş Yapmamış Kullanıcı İçin -->
+          <div class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center border-2"
+                 style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);">
+              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">Giriş Yapılmadı</h3>
+            <p class="text-xs text-gray-400 max-w-xs">Hesabınıza erişmek ve mağaza avantajlarından yararlanmak için giriş yapın.</p>
+            <a href="/auth/login" class="w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all hover:scale-105"
+               style="background: linear-gradient(135deg, var(--color-primary), #9333ea);">
+              Giriş Yap
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- PROMO BAR -->
+      {% if settings.header.promo_texts != blank and settings.header.promo_texts.size > 0 %}
+        <div class="promo-bar-dark w-full relative z-20 overflow-hidden flex text-sm font-bold py-3">
+          <div class="flex whitespace-nowrap animate-[marquee_40s_linear_infinite] hover:[animation-play-state:paused] items-center">
+            {% assign loop_count = '1,2,3,4,5,6,7,8' | split: ',' %}
+            {% for i in loop_count %}
+              {% for promo in settings.header.promo_texts %}
+                <div
+                  class="inline-flex items-center gap-2 px-8 py-2 mx-4 rounded-xl border border-white/10"
+                  style="
+                    {% if promo.bg_color %}background-color: {{ promo.bg_color }};{% else %}background-color: rgba(255,255,255,0.06);{% endif %}
+                    {% if promo.text_color %}color: {{ promo.text_color }};{% else %}color: #f1f0f3;{% endif %}
+                  "
+                >
+                  <span
+                    class="w-2 h-2 rounded-full animate-pulse"
+                    style="background-color: {% if promo.text_color %}{{ promo.text_color }}{% else %}var(--color-primary){% endif %};"
+                  ></span>
+                  {{ promo.text }}
+                </div>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endunless %}
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2"></div>
+
+    <script>
+      function toggleMobileMenu() {
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const sidebar = document.getElementById('mobile-menu-sidebar');
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+
+        if (isClosed) {
+          // Open menu
+          overlay.classList.remove('opacity-0', 'pointer-events-none');
+          overlay.classList.add('opacity-100');
+          sidebar.classList.remove('-translate-x-full');
+          document.body.style.overflow = 'hidden';
+        } else {
+          // Close menu
+          overlay.classList.remove('opacity-100');
+          overlay.classList.add('opacity-0', 'pointer-events-none');
+          sidebar.classList.add('-translate-x-full');
+          document.body.style.overflow = '';
+        }
+      }
+
+      // Toast Notification Logic
+      window.showToast = function(message, type = 'info') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+          container = document.createElement('div');
+          container.id = 'toast-container';
+          container.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[999999] flex flex-col items-center gap-2 pointer-events-none';
+          document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        let bgStyle = 'bg-gray-900 border-gray-700 text-white shadow-2xl';
+        let icon = `<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+
+        if (type === 'success') {
+          bgStyle = 'bg-emerald-600 border-emerald-500 text-white shadow-emerald-900/50 shadow-xl';
+          icon = `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
+        } else if (type === 'error') {
+          bgStyle = 'bg-red-600 border-red-500 text-white shadow-red-900/50 shadow-xl';
+          icon = `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+        } else if (type === 'warning') {
+          bgStyle = 'bg-amber-600 border-amber-500 text-white shadow-amber-900/50 shadow-xl';
+          icon = `<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+        }
+
+        toast.className = `pointer-events-auto px-6 py-3.5 rounded-2xl shadow-2xl text-sm font-bold border transform transition-all duration-300 translate-y-6 opacity-0 flex items-center gap-3 max-w-md ${bgStyle}`;
+        toast.innerHTML = icon + `<span>${message}</span>`;
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.remove('translate-y-6', 'opacity-0');
+          toast.classList.add('translate-y-0', 'opacity-100');
+        });
+
+        setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-6', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 4000);
+      };
+
+      function copyIp(ip) {
+        navigator.clipboard.writeText(ip);
+        window.showToast('Sunucu adresi başarıyla kopyalandı!', 'success');
+      }
+
+      // Global Callback & URL Params Handler
+      document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('accessToken');
+        const refreshToken = urlParams.get('refreshToken');
+        const discordStatus = urlParams.get('discord_status');
+        const discordError = urlParams.get('discord_error');
+        const discordUsername = urlParams.get('discord_username');
+        const generalError = urlParams.get('error');
+
+        const isAuthPage = window.location.pathname.includes('/auth');
+
+        if (accessToken) {
+          try {
+            localStorage.setItem('accessToken', accessToken);
+            if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+          } catch(e) {}
+          if (!isAuthPage) {
+            window.showToast('Giriş başarılı! Hoş geldiniz.', 'success');
+            urlParams.delete('accessToken');
+            urlParams.delete('refreshToken');
+            const cleanUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+            window.history.replaceState({}, document.title, cleanUrl);
+          }
+        }
+
+        if (discordStatus === 'connected' && !isAuthPage) {
+          const uName = discordUsername ? decodeURIComponent(discordUsername) : '';
+          window.showToast(uName ? `"${uName}" Discord hesabınız başarıyla bağlandı!` : 'Discord hesabınız başarıyla bağlandı!', 'success');
+          urlParams.delete('discord_status');
+          urlParams.delete('discord_username');
+          const cleanUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
+
+        if (discordError && !isAuthPage) {
+          if (discordError === 'NOT_LINKED') {
+            const uName = discordUsername ? decodeURIComponent(discordUsername) : 'Discord';
+            window.showToast(`"${uName}" Discord hesabı herhangi bir oyuncu hesabıyla eşleştirilmemiş. Lütfen önce giriş yapıp profilinizden Discord'u bağlayın.`, 'error');
+          } else if (discordError === 'ALREADY_LINKED_TO_ANOTHER_ACCOUNT') {
+            window.showToast('Bu Discord hesabı zaten başka bir oyuncu hesabına bağlı!', 'error');
+          } else if (discordError === 'USER_BANNED') {
+            window.showToast('Hesabınız yasaklanmıştır.', 'error');
+          } else {
+            window.showToast(decodeURIComponent(discordError), 'error');
+          }
+          urlParams.delete('discord_error');
+          urlParams.delete('discord_username');
+          const cleanUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+          window.history.replaceState({}, document.title, cleanUrl);
+        } else if (generalError && !isAuthPage) {
+          window.showToast(decodeURIComponent(generalError), 'error');
+          urlParams.delete('error');
+          const cleanUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
+      });
+    </script>
+
+    <!-- MAIN CONTENT -->
+    <main
+      id="MainContent"
+      class="flex-grow w-full relative z-10 {% if template == 'auth' or template contains 'auth/' %}h-screen flex{% elsif template == 'errors/maintenance' %}flex items-center justify-center min-h-screen{% endif %}"
+    >
+      {{ content_for_layout }}
+    </main>
+
+    {% unless template == 'auth' or template contains 'auth/' or template == 'errors/maintenance' %}
+      <!--
+        ============================================================
+        FOOTER (Eski Tema Yapısı: FooterTop Banner + FooterCard)
+        ============================================================
+      -->
+      <footer class="w-full mt-20 relative z-10">
+        <!-- FooterTop Bar (Overlap Logo + Server IP) -->
+        <div
+          class="w-full relative mt-8 sm:mt-12 md:mt-16 overflow-visible border-y-2"
+          style="background: rgba(26, 16, 32, 0.95); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.3);"
+        >
+          <div class="relative px-5 max-w-[1350px] mx-auto">
+            <!-- Logo - Absolute positioned above the bar -->
+            <div
+              class="absolute -top-14 sm:-top-16 md:-top-16 left-1/2 -translate-x-1/2 md:left-8 md:translate-x-0 z-20 group cursor-pointer"
+              onclick="copyIp('{{ settings.server_ip | default: 'mc.hypixel.net' }}')"
+              title="IP'yi kopyalamak için tıklayın"
+            >
+              <!-- Logo glow effect -->
+              <div
+                class="absolute inset-0 blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-700 rounded-full"
+                style="background-color: var(--color-primary);"
+              ></div>
+
+              <!-- Logo container -->
+              <div class="relative">
+                {% assign default_logo = 'https://avatars.githubusercontent.com/u/3840546?s=280&v=4' %}
+                <img
+                  src="{{ settings.footer.logo | default: settings.logo_light | default: default_logo }}"
+                  alt="{{ shop.name }}"
+                  class="h-[90px] w-auto sm:h-[120px] md:h-[160px] object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 drop-shadow-2xl"
+                  style="image-rendering: crisp-edges;"
+                >
+              </div>
+            </div>
+
+            <!-- Server address content -->
+            <div class="py-4 sm:py-4 md:py-5 px-4 sm:px-6 md:px-8 transition-all duration-300 flex items-center justify-center md:justify-end">
+              <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+                <!-- Server Info -->
+                <div
+                  class="flex flex-col items-center md:items-end gap-0.5 sm:gap-1 cursor-pointer select-none"
+                  onclick="copyIp('{{ settings.server_ip | default: 'mc.hypixel.net' }}')"
+                  title="IP'yi kopyala"
+                >
+                  <span class="text-lg sm:text-xl md:text-2xl font-black text-white transition-all duration-300">
+                    {{ settings.server_ip | default: 'mc.hypixel.net' }}
+                  </span>
+                  <span class="server-player-count text-[10px] sm:text-xs md:text-sm text-white/70 font-medium">
+                    {% if statistics.onlinePlayers -%}
+                      {{- statistics.onlinePlayers }} Oyuncu Çevrimiçi
+                    {%- else -%}
+                      Yükleniyor...
+                    {%- endif %}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FooterCard (Ana Footer İçeriği) -->
+        <div class="py-[50px] text-white" style="background-color: var(--color-surface, #1a1020);">
+          <div class="px-5 max-w-[1350px] mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-8 lg:gap-y-0">
+              <!-- Site Bilgisi -->
+              <div class="lg:col-span-5">
+                <div class="mb-8 lg:mb-0">
+                  <h3 class="uppercase font-bold text-xl mb-[10px]" style="color: var(--color-primary);">
+                    {{ shop.name }}
+                  </h3>
+                  <p class="text-sm leading-relaxed lg:mb-5 max-w-md" style="color: var(--color-text-secondary);">
+                    {{
+                      settings.footer.about
+                      | default: "Türkiye'nin en gelişmiş Minecraft sunucu ağı. Bize katıl ve maceraya başla!"
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Bağlantılar -->
+              <div class="lg:col-span-3">
+                <div class="mb-8 lg:mb-0">
+                  <h3 class="uppercase font-bold text-xl mb-[10px]" style="color: var(--color-primary);">
+                    Bağlantılar
+                  </h3>
+                  <ul class="p-0 m-0 list-none space-y-2">
+                    {% if settings.nav_links != blank %}
+                      {% for link in settings.nav_links %}
+                        <li>
+                          <a
+                            class="flex items-center gap-2 text-sm no-underline transition-all duration-300 hover:text-primary hover:translate-x-1"
+                            style="color: var(--color-text-secondary);"
+                            href="{{ link.url }}"
+                          >
+                            <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            {{ link.title }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    {% elsif settings.footer.quick_links != blank %}
+                      {% for link in settings.footer.quick_links %}
+                        <li>
+                          <a
+                            class="flex items-center gap-2 text-sm no-underline transition-all duration-300 hover:text-primary hover:translate-x-1"
+                            style="color: var(--color-text-secondary);"
+                            href="{{ link.url }}"
+                          >
+                            <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            {{ link.title }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    {% else %}
+                      <li>
+                        <a
+                          class="flex items-center gap-2 text-sm no-underline transition-all duration-300 hover:text-primary hover:translate-x-1"
+                          style="color: var(--color-text-secondary);"
+                          href="/"
+                        >
+                          <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                          </svg>
+                          Ana Sayfa
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="flex items-center gap-2 text-sm no-underline transition-all duration-300 hover:text-primary hover:translate-x-1"
+                          style="color: var(--color-text-secondary);"
+                          href="/store"
+                        >
+                          <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                          </svg>
+                          Mağaza
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="flex items-center gap-2 text-sm no-underline transition-all duration-300 hover:text-primary hover:translate-x-1"
+                          style="color: var(--color-text-secondary);"
+                          href="/forum"
+                        >
+                          <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                          </svg>
+                          Forum
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Sosyal Medya -->
+              <div class="lg:col-span-4">
+                <div class="mb-8 lg:mb-0">
+                  <h3 class="uppercase font-bold text-xl mb-[10px]" style="color: var(--color-primary);">
+                    Sosyal Medya
+                  </h3>
+                  <div class="flex gap-3 mt-3 flex-wrap">
+                    {% if settings.discord_url != blank and settings.discord_url != '#' %}
+                      <a
+                        href="{{ settings.discord_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-bold text-sm shadow-lg hover:scale-105 transition-all duration-200"
+                        style="background-color: var(--color-primary);"
+                        title="Discord"
+                      >
+                        <i class="fa-brands fa-discord text-lg"></i> Discord
+                      </a>
+                    {% endif %}
+                    {% if settings.twitter_url != blank and settings.twitter_url != '#' %}
+                      <a
+                        href="{{ settings.twitter_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all duration-200"
+                        title="Twitter"
+                      >
+                        <i class="fa-brands fa-x-twitter text-lg"></i> Twitter
+                      </a>
+                    {% endif %}
+                    {% if settings.instagram_url != blank and settings.instagram_url != '#' %}
+                      <a
+                        href="{{ settings.instagram_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all duration-200"
+                        title="Instagram"
+                      >
+                        <i class="fa-brands fa-instagram text-lg"></i> Instagram
+                      </a>
+                    {% endif %}
+                    {% if settings.youtube_url != blank and settings.youtube_url != '#' %}
+                      <a
+                        href="{{ settings.youtube_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all duration-200"
+                        title="YouTube"
+                      >
+                        <i class="fa-brands fa-youtube text-lg"></i> YouTube
+                      </a>
+                    {% endif %}
+                    {% if settings.tiktok_url != blank and settings.tiktok_url != '#' %}
+                      <a
+                        href="{{ settings.tiktok_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all duration-200"
+                        title="TikTok"
+                      >
+                        <i class="fa-brands fa-tiktok text-lg"></i> TikTok
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alt Telif & Powered By Çubuğu -->
+            <div class="mt-10 pt-6 border-t" style="border-color: rgba(255,255,255,0.08);">
+              <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+                <div class="text-center md:text-left" style="color: var(--color-text-secondary);">
+                  <p class="font-semibold">
+                    {{ settings.footer.copyright | default: '© 2026 Tüm hakları saklıdır.' }}
+                  </p>
+                  <p class="text-xs mt-1 opacity-70">
+                    Mojang AB ile bağlantılı değiliz.
+                  </p>
+                </div>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="transition-opacity duration-300 hover:opacity-80 flex items-center gap-2"
+                  href="https://crafter.net.tr/"
+                  style="color: var(--color-text-secondary);"
+                >
+                  <span class="text-sm">Powered by</span>
+                  <span class="font-bold text-base" style="color: var(--color-primary);">Crafter CMS</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    {% endunless %}
+
+    <!-- Global Scripts -->
+    <script>
+      // NProgress Page Load Handling
+      NProgress.configure({ showSpinner: false });
+      NProgress.done();
+      
+      async function logoutAccount() {
+        try {
+          await fetch('/api/storefront/v2/auth/logout', { method: 'POST' });
+          window.location.reload();
+        } catch (err) {
+          window.location.reload();
+        }
+      }
+      
+      document.addEventListener('click', e => {
+        const a = e.target.closest('a');
+        if (a && a.href && !a.href.startsWith('#') && !a.target && a.host === window.location.host) {
+          if (a.href !== window.location.href) NProgress.start();
+        }
+      });
+
+      // Discord Widget Data Fetcher
+      {% if settings.discord.guild_id != blank %}
+      fetch('https://discord.com/api/guilds/{{ settings.discord.guild_id | default: '1256991995147190272' }}/widget.json')
+        .then(res => res.json())
+        .then(data => {
+          if (data.presence_count !== undefined) {
+            document.querySelectorAll('.discord-live-count').forEach(el => {
+              const format = el.getAttribute('data-format') || '{count}';
+              el.textContent = format.replace('{count}', data.presence_count);
+            });
+          }
+          if (data.instant_invite) {
+            document.querySelectorAll('.discord-invite-link').forEach(el => {
+              el.href = data.instant_invite;
+            });
+          }
+        })
+        .catch(err => console.error('Discord API Hatası:', err));
+      {% endif %}
+
+      // MCAPI.TR Minecraft Server Status Fetcher
+      const serverIp = '{{ settings.server_ip | default: "mc.hypixel.net" }}';
+      if (serverIp) {
+        const countEl = document.getElementById('server-player-count');
+        
+        async function fetchServerStatus() {
+          try {
+            const res = await fetch(`https://mcapi.tr/api/v1/status/${serverIp}`);
+            if (!res.ok) throw new Error('MCAPI.TR error');
+            const data = await res.json();
+            if (data.online && data.players) {
+              return data.players.online;
+            }
+          } catch (e) {
+            console.warn('MCAPI.TR failed, trying fallback...', e);
+            try {
+              const res2 = await fetch(`https://api.mcsrvstat.us/3/${serverIp}`);
+              if (!res2.ok) throw new Error('Fallback API error');
+              const data2 = await res2.json();
+              if (data2.online && data2.players) {
+                return data2.players.online;
+              }
+            } catch (e2) {
+              console.error('All APIs failed', e2);
+            }
+          }
+          return null;
+        }
+
+        fetchServerStatus().then(online => {
+          document.querySelectorAll('.server-player-count').forEach(el => {
+            if (online !== null) {
+              el.textContent = `${online} Oyuncu Çevrimiçi`;
+            } else {
+              el.textContent = 'Bakımda veya Kapalı';
+            }
+          });
+        });
+      }
+    </script>
+    <script>
+      function updateGlobalCartBadge() {
+        try {
+          const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+          document.querySelectorAll('.header-cart-badge').forEach((el) => {
+            el.innerText = count;
+            if (count > 0) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          });
+        } catch (e) {}
+      }
+
+      // Global Add to Cart function
+      window.addToCart = function (product, quantity = 1) {
+        try {
+          const productId = product.id || product._id;
+          if (!productId) return;
+
+          let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          const idx = cart.findIndex((i) => (i.id || i._id) === productId);
+          if (idx !== -1) {
+            cart[idx].quantity += quantity;
+          } else {
+            product.quantity = quantity;
+            product.id = productId; // ensure standard id field
+            cart.push(product);
+          }
+          localStorage.setItem('cart', JSON.stringify(cart));
+          updateGlobalCartBadge();
+          window.showToast?.('Ürün sepete eklendi!', 'success');
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', updateGlobalCartBadge);
+      // Listen for local storage changes across tabs
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'cart') updateGlobalCartBadge();
+      });
+    </script>
+    <!-- Drawer Management Scripts -->
+    <script>
+      // User Drawer (Right Side)
+      function openUserMenu() {
+        const drawer = document.getElementById('user-drawer');
+        const backdrop = document.getElementById('user-drawer-backdrop');
+        if (!drawer || !backdrop) return;
+        backdrop.classList.remove('opacity-0', 'pointer-events-none');
+        backdrop.classList.add('opacity-100');
+        drawer.classList.remove('translate-x-full');
+        drawer.classList.add('translate-x-0');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeUserMenu() {
+        const drawer = document.getElementById('user-drawer');
+        const backdrop = document.getElementById('user-drawer-backdrop');
+        if (!drawer || !backdrop) return;
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-0');
+        drawer.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      }
+
+      function toggleUserMenu() {
+        const drawer = document.getElementById('user-drawer');
+        if (drawer && drawer.classList.contains('translate-x-0')) {
+          closeUserMenu();
+        } else {
+          openUserMenu();
+        }
+      }
+
+      // Mobile Navigation Drawer (Left Side)
+      function toggleMobileMenu() {
+        const sidebar = document.getElementById('mobile-menu-sidebar');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        if (!sidebar || !overlay) return;
+
+        const isOpen = sidebar.classList.contains('translate-x-0');
+        if (isOpen) {
+          sidebar.classList.remove('translate-x-0');
+          sidebar.classList.add('-translate-x-full');
+          overlay.classList.remove('opacity-100');
+          overlay.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        } else {
+          sidebar.classList.remove('-translate-x-full');
+          sidebar.classList.add('translate-x-0');
+          overlay.classList.remove('opacity-0', 'pointer-events-none');
+          overlay.classList.add('opacity-100');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeUserMenu();
+          const sidebar = document.getElementById('mobile-menu-sidebar');
+          if (sidebar && sidebar.classList.contains('translate-x-0')) {
+            toggleMobileMenu();
+          }
+        }
+      });
+    </script>
+
+    {% if settings.integrations.tawk_to_id != blank %}
+      <!-- Start of Tawk.to Script -->
+      <script type="text/javascript">
+        var Tawk_API = Tawk_API || {},
+          Tawk_LoadStart = new Date();
+        (function () {
+          var s1 = document.createElement('script'),
+            s0 = document.getElementsByTagName('script')[0];
+          s1.async = true;
+          s1.src = 'https://embed.tawk.to/{{ settings.integrations.tawk_to_id }}';
+          s1.charset = 'UTF-8';
+          s1.setAttribute('crossorigin', '*');
+          s0.parentNode.insertBefore(s1, s0);
+        })();
+      </script>
+      <!-- End of Tawk.to Script -->
+    {% endif %}
+  </body>
+</html>

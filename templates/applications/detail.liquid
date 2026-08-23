@@ -1,0 +1,280 @@
+<!-- ============================================================
+     BAŞVURU DETAYI VE FORMU (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <a href="/applications" class="hover:text-primary transition-colors" style="color: #cbd5e1;">Başvurular</a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold line-clamp-1" style="color: var(--color-primary);">{{ formDetail.title }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- SOL: Form Bilgileri (4 Cols) -->
+    <aside class="lg:col-span-4 space-y-6">
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-6 backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <h3 class="font-black text-white mb-6 pb-3 border-b text-sm flex items-center gap-2" style="color: #ffffff !important; border-color: rgba(255, 255, 255, 0.08);">
+          <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Form Detayları</span>
+        </h3>
+
+        <div class="space-y-3.5">
+          <div class="flex items-center justify-between p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <span class="text-xs font-bold text-gray-300">Durum</span>
+            {% if formDetail.isActive %}
+              <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded-xl text-[10px] font-black uppercase tracking-wider border border-emerald-500/40 shadow">
+                Aktif
+              </span>
+            {% else %}
+              <span class="px-2.5 py-1 bg-white/5 text-gray-400 rounded-xl text-[10px] font-bold uppercase tracking-wider border border-white/10">
+                Pasif
+              </span>
+            {% endif %}
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <span class="text-xs font-bold text-gray-300">Soru Sayısı</span>
+            <span class="text-sm font-black text-purple-300">{{ formDetail.inputs.size }}</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <span class="text-xs font-bold text-gray-300">Yayınlanma</span>
+            <span class="text-xs font-semibold text-gray-300">{{ formDetail.createdAt | date: '%d.%m.%Y' }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- SAĞ: Form İçeriği (8 Cols) -->
+    <main class="lg:col-span-8">
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-6 sm:p-10 backdrop-blur-xl relative overflow-hidden"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="mb-8 pb-6 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+          <h2 class="text-2xl sm:text-3xl font-black text-white mb-2" style="color: #ffffff !important;">{{ formDetail.title }}</h2>
+          <p class="text-xs sm:text-sm font-medium text-gray-300 leading-relaxed">{{ formDetail.description }}</p>
+        </div>
+
+        {% if formDetail.isActive %}
+          <!-- Başarı Mesajı -->
+          <div
+            id="apply-success"
+            class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center"
+            style="background: rgba(18, 10, 24, 0.98);"
+          >
+            <div class="w-20 h-20 rounded-3xl flex items-center justify-center mb-6 border shadow-2xl"
+                 style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #6ee7b7;">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-black text-white mb-2" style="color: #ffffff !important;">Başvurunuz Gönderildi!</h3>
+            <p class="text-xs sm:text-sm text-gray-300 font-medium max-w-md mb-8 leading-relaxed">
+              Başvuru formunuz başarıyla iletildi. Ekibimiz başvurunuzu değerlendirdikten sonra profiliniz veya oyun içi üzerinden sizinle iletişime geçecektir.
+            </p>
+            <a
+              href="/applications"
+              class="px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
+              style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+            >
+              Başvurularıma Dön
+            </a>
+          </div>
+
+          <!-- Hata Mesajı -->
+          <div
+            id="apply-error"
+            class="hidden mb-6 p-4 rounded-2xl border flex items-center gap-3"
+            style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;"
+          >
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="apply-error-text" class="text-xs sm:text-sm font-bold">Lütfen tüm zorunlu alanları doldurun.</span>
+          </div>
+
+          <form id="application-form" class="space-y-6">
+            {% for input in formDetail.inputs %}
+              <div class="space-y-2">
+                <label class="block text-xs font-black uppercase tracking-wider text-purple-300">
+                  {{ input.name }}
+                  <span class="text-rose-400">*</span>
+                </label>
+
+                {% if input.type == 'textarea' %}
+                  <textarea
+                    name="{{ input.name }}"
+                    required
+                    rows="4"
+                    placeholder="{{ input.name }} hakkında detay verin..."
+                    class="w-full px-4 py-3.5 rounded-2xl border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-white text-sm placeholder:text-gray-500 shadow-inner resize-none"
+                    style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+                  ></textarea>
+                {% elsif input.type == 'checkbox' %}
+                  <label class="flex items-center gap-3 cursor-pointer p-4 rounded-2xl border transition-all w-fit"
+                         style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.1);">
+                    <input
+                      type="checkbox"
+                      name="{{ input.name }}"
+                      class="w-5 h-5 rounded-lg border-white/20 text-primary focus:ring-primary bg-black/40 cursor-pointer"
+                    >
+                    <span class="text-xs font-bold text-gray-200 select-none">Kabul ediyorum ve onaylıyorum</span>
+                  </label>
+                {% else %}
+                  <input
+                    type="{% if input.type == 'datetime' %}datetime-local{% elsif input.type == 'phone' %}tel{% else %}{{ input.type }}{% endif %}"
+                    name="{{ input.name }}"
+                    required
+                    placeholder="{{ input.name }} giriniz..."
+                    class="w-full px-4 py-3.5 rounded-2xl border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-white text-sm placeholder:text-gray-500 shadow-inner"
+                    style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+                  >
+                {% endif %}
+              </div>
+            {% endfor %}
+
+            <div class="pt-6 border-t flex items-center justify-end gap-4 mt-8" style="border-color: rgba(255, 255, 255, 0.08);">
+              <a href="/applications" class="px-6 py-3.5 font-bold text-xs uppercase tracking-wider text-gray-400 hover:text-white transition-colors">
+                İptal Et
+              </a>
+              <button
+                type="submit"
+                id="btn-submit"
+                class="px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20 cursor-pointer flex items-center gap-2"
+                style="
+                  background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                  box-shadow: 0 10px 30px rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+                "
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+                <span>Başvuruyu Gönder</span>
+              </button>
+            </div>
+          </form>
+        {% else %}
+          <div
+            class="rounded-3xl border-2 p-8 text-center backdrop-blur-xl shadow-xl"
+            style="background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.35);"
+          >
+            <div class="w-14 h-14 bg-rose-500/20 text-rose-400 border border-rose-500/40 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-black text-white mb-1" style="color: #ffffff !important;">Form Başvurulara Kapalı</h3>
+            <p class="text-xs text-rose-200 font-medium">Bu form şu anda aktif değildir ve yeni başvuru kabul etmemektedir.</p>
+            <a
+              href="/applications"
+              class="inline-block mt-4 text-xs font-black uppercase tracking-wider text-purple-300 hover:text-white underline"
+            >
+              Başvurular sayfasına dön
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('application-form');
+    if (!form) return;
+
+    const btnSubmit = document.getElementById('btn-submit');
+    const boxSuccess = document.getElementById('apply-success');
+    const boxError = document.getElementById('apply-error');
+    const textError = document.getElementById('apply-error-text');
+    const formId = '{{ formDetail.id | default: formDetail._id }}';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      boxError?.classList.add('hidden');
+      
+      const formData = new FormData(form);
+      const values = [];
+
+      {% for input in formDetail.inputs %}
+        (function() {
+          const inputName = `{{ input.name }}`;
+          const inputType = `{{ input.type }}`;
+          let val = formData.get(inputName);
+          
+          if (inputType === 'checkbox') {
+            const cb = form.querySelector(`input[name="${inputName.replace(/"/g, '\\"')}"]`);
+            val = (cb && cb.checked) ? "true" : "false";
+          }
+          
+          if (val !== null && val !== undefined) {
+            values.push({
+              inputId: inputName,
+              value: val.toString()
+            });
+          }
+        })();
+      {% endfor %}
+
+      if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `
+          <div class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></div>
+          <span>Gönderiliyor...</span>
+        `;
+      }
+
+      try {
+        const res = await fetch(`/api/storefront/staff-forms/${formId}/apply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ values })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok && !data.error) {
+          boxSuccess?.classList.remove('hidden');
+          boxSuccess?.classList.add('flex');
+        } else {
+          boxError?.classList.remove('hidden');
+          if (textError) textError.innerText = data.message || data.error || 'Başvuru gönderilirken bir hata oluştu.';
+        }
+      } catch (err) {
+        boxError?.classList.remove('hidden');
+        if (textError) textError.innerText = 'Sunucuyla bağlantı kurulamadı.';
+      } finally {
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            <span>Başvuruyu Gönder</span>
+          `;
+        }
+      }
+    });
+  });
+</script>

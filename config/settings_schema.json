@@ -1,0 +1,628 @@
+[
+  {
+    "name": "Genel Ayarlar",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo_light",
+        "label": "Site Logosu (Açık/Renkli)",
+        "info": "Koyu zeminlerde ve menüde görüntülenecek ana logo.",
+        "default": "https://avatars.githubusercontent.com/u/3840546?s=280&v=4"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_dark",
+        "label": "Site Logosu (Yedek)",
+        "info": "Gerektiğinde kullanılacak alternatif logo.",
+        "default": "https://avatars.githubusercontent.com/u/3840546?s=280&v=4"
+      },
+      {
+        "type": "number",
+        "id": "logo_width",
+        "label": "Menü Logo Genişliği (px)",
+        "default": 160
+      },
+      {
+        "type": "text",
+        "id": "server_ip",
+        "label": "Sunucu IP Adresi",
+        "placeholder": "play.sunucu.com.tr",
+        "info": "Tıklandığında panoya kopyalanacak ana sunucu adresi.",
+        "default": "mc.hypixel.net"
+      },
+      {
+        "type": "text",
+        "id": "server_port",
+        "label": "Sunucu Portu (Opsiyonel)",
+        "placeholder": "25565",
+        "default": "25565"
+      },
+      {
+        "type": "text",
+        "id": "discord_url",
+        "label": "Discord Davet Linki",
+        "placeholder": "https://discord.gg/sunucunuz",
+        "default": "https://discord.gg"
+      },
+      {
+        "type": "text",
+        "id": "discord.guild_id",
+        "label": "Discord Sunucu ID (Widget & Çevrimiçi Sayaç İçin)",
+        "info": "Ana sayfada Discord üye ve ses durumunu çekmek için gerekli sunucu ID.",
+        "default": "1256991995147190272"
+      }
+    ]
+  },
+  {
+    "name": "Renkler & Tema Paleti",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors.primary",
+        "label": "Ana Tema Rengi (Primary Mor / Accent)",
+        "info": "Tüm butonlar, vurgular, rozetler ve neon parlamalar bu renge göre şekillenir.",
+        "default": "#7c3aed"
+      },
+      {
+        "type": "color",
+        "id": "colors.secondary",
+        "label": "İkincil Vurgu Rengi (Gradyan)",
+        "info": "Buton gradyanlarında ve efektlerde kullanılan tamamlayıcı renk.",
+        "default": "#9333ea"
+      },
+      {
+        "type": "color",
+        "id": "colors.background",
+        "label": "Arka Plan Zemin Rengi",
+        "info": "Sitenin derin koyu ana arka planı.",
+        "default": "#0e0914"
+      },
+      {
+        "type": "color",
+        "id": "colors.surface",
+        "label": "Kart & Panel Zemin Rengi",
+        "info": "Cam kartlar ve kutu arka planları.",
+        "default": "#1a1020"
+      },
+      {
+        "type": "color",
+        "id": "colors.border",
+        "label": "Çizgi & Sınır Rengi",
+        "info": "Cam panellerin kenarlık çizgileri.",
+        "default": "rgba(124, 58, 237, 0.25)"
+      },
+      {
+        "type": "color",
+        "id": "colors.text_primary",
+        "label": "Ana Metin Rengi (Başlıklar)",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "colors.text_secondary",
+        "label": "İkincil Metin Rengi (Açıklamalar)",
+        "default": "#cbd5e1"
+      }
+    ]
+  },
+  {
+    "name": "Üst Kısım (Header & Hero)",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "header.banner",
+        "label": "Hero Arka Plan Afişi",
+        "info": "Sayfanın en üstünde yer alan derin uzay/Minecraft temalı geniş afiş görseli."
+      },
+      {
+        "type": "number",
+        "id": "hero_logo_width",
+        "label": "Hero Afiş Logo Genişliği (px)",
+        "default": 240
+      },
+      {
+        "type": "checkbox",
+        "id": "hero_logo_shake",
+        "label": "Hero Logosu Sallanma Efekti",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "header.title",
+        "label": "Hero Başlığı",
+        "default": "TÜRKİYE'NİN EN İYİ MINECRAFT DENEYİMİ"
+      },
+      {
+        "type": "text",
+        "id": "header.subtitle",
+        "label": "Hero Alt Açıklaması",
+        "default": "Kesintisiz oyun keyfi, özel mini oyunlar ve eşsiz bir topluluk seni bekliyor."
+      },
+      {
+        "id": "header.promo_texts",
+        "type": "array",
+        "label": "Kayan Promosyon Duyuruları",
+        "item_schema": [
+          {
+            "id": "text",
+            "type": "text",
+            "label": "Duyuru Metni",
+            "default": "🎉 YENİ SEZON BAŞLADI!"
+          },
+          {
+            "id": "bg_color",
+            "type": "color",
+            "label": "Arkaplan Rengi (Opsiyonel)"
+          },
+          {
+            "id": "text_color",
+            "type": "color",
+            "label": "Yazı Rengi (Opsiyonel)"
+          }
+        ]
+      },
+      {
+        "id": "nav_links",
+        "type": "array",
+        "label": "Üst Menü Bağlantıları",
+        "item_schema": [
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Menü Başlığı",
+            "default": "Anasayfa"
+          },
+          {
+            "id": "url",
+            "type": "url",
+            "label": "URL Adresi",
+            "default": "/"
+          },
+          {
+            "id": "new_tab",
+            "type": "checkbox",
+            "label": "Yeni sekmede açılsın mı?"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ana Sayfa (Bölümler & Butonlar)",
+    "settings": [
+      {
+        "type": "text",
+        "id": "home.cta_server_label",
+        "label": "Hero IP Buton Üst Etiketi",
+        "default": "SUNUCU ADRESİ (KOPYALA)"
+      },
+      {
+        "type": "text",
+        "id": "home.cta_discord_title",
+        "label": "Hero Discord Buton Başlığı",
+        "default": "DİSKORD TOPLULUĞU"
+      },
+      {
+        "type": "text",
+        "id": "home.cta_discord_subtitle",
+        "label": "Hero Discord Buton Alt Başlığı",
+        "default": "Sesli Sohbet & Çekilişler"
+      },
+      {
+        "type": "text",
+        "id": "home.cta_store_title",
+        "label": "Hero Mağaza Buton Başlığı",
+        "default": "MAĞAZAYI KEŞFET"
+      },
+      {
+        "type": "text",
+        "id": "home.cta_store_subtitle",
+        "label": "Hero Mağaza Buton Alt Başlığı",
+        "default": "Özel Ürün & Avantajlar"
+      },
+      {
+        "type": "checkbox",
+        "id": "home.spotlight_enabled",
+        "label": "Tanıtım / Etkinlik Banner'ı Gösterilsin mi?",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "home.spotlight_badge",
+        "label": "Tanıtım Rozet Metni",
+        "default": "ÖZEL ETKİNLİK"
+      },
+      {
+        "type": "text",
+        "id": "home.spotlight_title",
+        "label": "Tanıtım Başlığı",
+        "default": "Yeni Sezon & Turnuva Başladı!"
+      },
+      {
+        "type": "textarea",
+        "id": "home.spotlight_description",
+        "label": "Tanıtım Açıklaması",
+        "default": "En yeni zindanlar, özel eşyalar ve turnuva ödülleri seni bekliyor. Hemen katıl ve liderlik tablosundaki yerini al!"
+      },
+      {
+        "type": "image_picker",
+        "id": "home.spotlight_image",
+        "label": "Tanıtım Görseli"
+      },
+      {
+        "type": "text",
+        "id": "home.spotlight_button_text",
+        "label": "Tanıtım Buton Yazısı",
+        "default": "Hemen Katıl"
+      },
+      {
+        "type": "url",
+        "id": "home.spotlight_button_url",
+        "label": "Tanıtım Buton Linki",
+        "default": "/store"
+      },
+      {
+        "id": "home.slider",
+        "type": "array",
+        "label": "Ana Sayfa Slider",
+        "item_schema": [
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Slider Görseli"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Başlık"
+          },
+          {
+            "id": "description",
+            "type": "text",
+            "label": "Açıklama Metni"
+          },
+          {
+            "id": "button_text",
+            "type": "text",
+            "label": "Buton Yazısı",
+            "default": "İncele"
+          },
+          {
+            "id": "button_url",
+            "type": "url",
+            "label": "Buton Linki",
+            "default": "/"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "home.featured_title",
+        "label": "Vitrin Ürünleri Başlığı",
+        "default": "Popüler Ürünler"
+      },
+      {
+        "type": "text",
+        "id": "home.featured_description",
+        "label": "Vitrin Ürünleri Açıklaması",
+        "default": "Oyuncuların en çok tercih ettiği ürün ve avantajlar."
+      },
+      {
+        "type": "category_picker",
+        "id": "home.featured_category",
+        "label": "Öne Çıkan Ürünler Kategorisi",
+        "info": "Ana sayfada vitrin olarak sergilenecek ürün kategorisi."
+      },
+      {
+        "type": "text",
+        "id": "home.supporters_title",
+        "label": "Destekçiler Bölümü Başlığı",
+        "default": "En Çok Destekleyenler"
+      },
+      {
+        "type": "text",
+        "id": "home.supporters_description",
+        "label": "Destekçiler Bölümü Açıklaması",
+        "default": "Sunucumuza katkıda bulunan efsanevi oyuncularımız."
+      }
+    ]
+  },
+  {
+    "name": "Mağaza Ayarları",
+    "settings": [
+      {
+        "type": "text",
+        "id": "store.title",
+        "label": "Mağaza Sayfa Başlığı",
+        "default": "Oyunlar"
+      },
+      {
+        "type": "text",
+        "id": "store.description",
+        "label": "Mağaza Sayfa Açıklaması",
+        "default": "Sunucumuza destek olmak ve harika avantajlar elde etmek için oynamak istediğiniz oyunu seçin."
+      },
+      {
+        "type": "image_picker",
+        "id": "store.banner_image",
+        "label": "Mağaza Özel Banner Görseli"
+      },
+      {
+        "type": "text",
+        "id": "store.banner_title",
+        "label": "Mağaza Banner Başlığı",
+        "default": "Mağazaya Hoş Geldiniz!"
+      },
+      {
+        "type": "text",
+        "id": "store.banner_description",
+        "label": "Mağaza Banner Açıklaması",
+        "default": "Sunucumuza destek olmak ve harika avantajlar elde etmek için kategorilerden birini seçin."
+      }
+    ]
+  },
+  {
+    "name": "Topluluk & Forum",
+    "settings": [
+      {
+        "type": "text",
+        "id": "posts.title",
+        "label": "Haberler Sayfa Başlığı",
+        "default": "Haberler & Duyurular"
+      },
+      {
+        "type": "text",
+        "id": "posts.description",
+        "label": "Haberler Sayfa Açıklaması",
+        "default": "Sunucumuzla ilgili en son güncellemeler, etkinlikler ve duyurular."
+      },
+      {
+        "type": "text",
+        "id": "forum.title",
+        "label": "Forum Sayfa Başlığı",
+        "default": "Topluluk Forumu"
+      },
+      {
+        "type": "text",
+        "id": "forum.description",
+        "label": "Forum Sayfa Açıklaması",
+        "default": "Tartışmalara katılın, rehberleri okuyun ve fikirlerinizi paylaşın."
+      }
+    ]
+  },
+  {
+    "name": "Destek & Yardım",
+    "settings": [
+      {
+        "type": "text",
+        "id": "support.title",
+        "label": "Destek Sayfa Başlığı",
+        "default": "Destek Taleplerim"
+      },
+      {
+        "type": "text",
+        "id": "support.description",
+        "label": "Destek Sayfa Açıklaması",
+        "default": "Yardıma ihtiyacınız olan konularda uzman destek ekibimizle anında iletişime geçin."
+      },
+      {
+        "type": "text",
+        "id": "help.title",
+        "label": "Yardım Sayfa Başlığı",
+        "default": "Yardım & Bilgi Bankası"
+      },
+      {
+        "type": "text",
+        "id": "help.description",
+        "label": "Yardım Sayfa Açıklaması",
+        "default": "Sıkça sorulan sorulara göz atabilir veya kategorilerden detaylı rehberleri inceleyebilirsiniz."
+      }
+    ]
+  },
+  {
+    "name": "Giriş / Kayıt (Auth)",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "auth.background",
+        "label": "Sağ Taraf Arka Plan Görseli"
+      },
+      {
+        "type": "text",
+        "id": "auth.right_title",
+        "label": "Sağ Taraf Başlık",
+        "default": "Türkiye'nin En Büyük\nMinecraft Topluluğu"
+      },
+      {
+        "type": "textarea",
+        "id": "auth.right_description",
+        "label": "Sağ Taraf Açıklama",
+        "default": "Hemen aramıza katıl, arkadaşlarınla birlikte devasa haritalarda hayatta kal, mini oyunlarda yeteneklerini göster ve efsanevi ödüller kazan!"
+      },
+      {
+        "type": "text",
+        "id": "auth.login_title",
+        "label": "Giriş Yap Başlığı",
+        "default": "Tekrar Hoş Geldin!"
+      },
+      {
+        "type": "text",
+        "id": "auth.login_description",
+        "label": "Giriş Yap Açıklaması",
+        "default": "Hesabına giriş yap ve maceraya kaldığın yerden devam et."
+      },
+      {
+        "type": "text",
+        "id": "auth.register_title",
+        "label": "Kayıt Ol Başlığı",
+        "default": "Maceraya Katıl!"
+      },
+      {
+        "type": "text",
+        "id": "auth.register_description",
+        "label": "Kayıt Ol Açıklaması",
+        "default": "Hemen ücretsiz bir hesap oluştur ve binlerce oyuncu arasına katıl."
+      }
+    ]
+  },
+  {
+    "name": "Alt Kısım (Footer)",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "footer.logo",
+        "label": "Footer Özel Logosu",
+        "info": "Boş bırakılırsa ana site logosu kullanılır."
+      },
+      {
+        "type": "number",
+        "id": "footer.logo_width",
+        "label": "Footer Logo Genişliği (px)",
+        "default": 192
+      },
+      {
+        "type": "textarea",
+        "id": "footer.about",
+        "label": "Hakkımızda Metni",
+        "default": "Türkiye'nin en gelişmiş Minecraft sunucu ağı. Bize katıl ve maceraya başla!"
+      },
+      {
+        "type": "text",
+        "id": "footer.contact_email",
+        "label": "İletişim E-Posta Adresi"
+      },
+      {
+        "type": "text",
+        "id": "footer.contact_phone",
+        "label": "İletişim Telefon Numarası"
+      },
+      {
+        "type": "text",
+        "id": "footer.contact_address",
+        "label": "İletişim Açık Adresi"
+      },
+      {
+        "id": "footer.quick_links",
+        "type": "array",
+        "label": "Hızlı Bağlantılar Menüsü",
+        "item_schema": [
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Link Başlığı"
+          },
+          {
+            "id": "url",
+            "type": "url",
+            "label": "URL"
+          }
+        ]
+      },
+      {
+        "id": "footer.support_links",
+        "type": "array",
+        "label": "Destek Linkleri Menüsü",
+        "item_schema": [
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Link Başlığı"
+          },
+          {
+            "id": "url",
+            "type": "url",
+            "label": "URL"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "footer.copyright",
+        "label": "Copyright (Telif Hakkı) Metni",
+        "default": "© 2026 Tüm hakları saklıdır."
+      }
+    ]
+  },
+  {
+    "name": "Sosyal Medya Linkleri",
+    "settings": [
+      {
+        "type": "text",
+        "id": "discord_url",
+        "label": "Discord Linki"
+      },
+      {
+        "type": "text",
+        "id": "instagram_url",
+        "label": "Instagram Linki"
+      },
+      {
+        "type": "text",
+        "id": "tiktok_url",
+        "label": "TikTok Linki"
+      },
+      {
+        "type": "text",
+        "id": "youtube_url",
+        "label": "YouTube Linki"
+      },
+      {
+        "type": "text",
+        "id": "x_url",
+        "label": "X / Twitter Linki"
+      },
+      {
+        "type": "text",
+        "id": "github_url",
+        "label": "GitHub Linki"
+      },
+      {
+        "type": "text",
+        "id": "forum_url",
+        "label": "Forum Linki"
+      }
+    ]
+  },
+  {
+    "name": "Bakım Modu",
+    "settings": [
+      {
+        "type": "text",
+        "id": "maintenance.title",
+        "label": "Bakım Başlığı",
+        "default": "Bakım Çalışması"
+      },
+      {
+        "type": "textarea",
+        "id": "maintenance.description",
+        "label": "Bakım Açıklaması",
+        "default": "Şu anda sistemlerimizde planlı bir bakım çalışması yürütülmektedir. Çok yakında geri döneceğiz. Anlayışınız için teşekkür ederiz."
+      },
+      {
+        "type": "text",
+        "id": "maintenance.footer_text",
+        "label": "Bakım Alt Bilgisi (İsteğe Bağlı)",
+        "default": "Yetkiniz varsa giriş yapıp görüntüleyebilirsiniz."
+      }
+    ]
+  },
+  {
+    "name": "Entegrasyonlar",
+    "settings": [
+      {
+        "type": "text",
+        "id": "integrations.google_analytics_id",
+        "label": "Google Analytics Measurement ID",
+        "placeholder": "G-XXXXXXXXXX",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "integrations.tawk_to_id",
+        "label": "Tawk.to Property/Widget ID",
+        "placeholder": "602d59ce918aa261273fddd4/1euoidjte",
+        "default": ""
+      }
+    ]
+  }
+]

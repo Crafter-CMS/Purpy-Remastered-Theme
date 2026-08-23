@@ -1,0 +1,248 @@
+<!-- ============================================================
+     YARDIM MERKEZİ & SSS (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Yardım Merkezi</span>
+  </div>
+
+  <!-- 2 Kolonlu Ana Layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- SOL KOLON: Yardım Kategorileri & SSS (8 Cols) -->
+    <div class="lg:col-span-8 space-y-10">
+      <!-- Başlık ve Arama -->
+      <div>
+        <div class="flex items-center gap-3.5 mb-4">
+          <div class="w-2 h-10 rounded-full" style="background: linear-gradient(to bottom, var(--color-primary), #9333ea);"></div>
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide" style="color: #ffffff !important;">
+              Yardım & Bilgi Bankası
+            </h1>
+            <p class="text-xs sm:text-sm font-medium text-gray-300">
+              Sıkça sorulan sorulara göz atabilir veya kategorilerden detaylı rehberleri inceleyebilirsiniz.
+            </p>
+          </div>
+        </div>
+
+        <!-- Arama Input -->
+        <div class="relative w-full max-w-md mt-6">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="help-search"
+            placeholder="Soru veya anahtar kelime ara..."
+            class="w-full pl-11 pr-4 py-3.5 text-xs rounded-2xl border-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-white placeholder:text-gray-500 shadow-inner"
+            style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+          >
+        </div>
+      </div>
+
+      <!-- Kategoriler Grid -->
+      <div>
+        <h2 class="text-lg font-black text-white mb-4 flex items-center gap-2" style="color: #ffffff !important;">
+          <div class="w-7 h-7 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          </div>
+          <span>Kategoriler</span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {% for cat in helpCenter.categories %}
+            <a
+              href="/help/category/{{ cat.id }}"
+              class="group rounded-3xl border-2 p-5 shadow-xl transition-all duration-300 hover:border-primary/60 hover:scale-[1.02] backdrop-blur-xl flex flex-col items-center text-center h-full relative cursor-pointer"
+              style="
+                background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+              "
+            >
+              <div class="w-14 h-14 mb-4 rounded-2xl flex items-center justify-center border shadow-lg group-hover:scale-110 transition-transform"
+                   style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+                {% if cat.icon == 'CubeIcon' %}
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                {% elsif cat.icon == 'DiscordIcon' %}
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+                {% else %}
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {% endif %}
+              </div>
+
+              <h3 class="text-base font-black text-white group-hover:text-primary transition-colors mb-1" style="color: #ffffff !important;">{{ cat.name }}</h3>
+              <p class="text-xs text-gray-400 font-medium line-clamp-2 mb-4 leading-relaxed flex-1">{{ cat.description }}</p>
+
+              <div class="mt-auto pt-3 w-full border-t flex items-center justify-center gap-1 text-[11px] font-black text-purple-300 uppercase tracking-wider group-hover:text-white transition-colors" style="border-color: rgba(255, 255, 255, 0.08);">
+                <span>Rehberi İncele</span>
+                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </div>
+            </a>
+          {% else %}
+            <div class="col-span-full py-10 text-center rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-2"
+                 style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+              <p class="text-xs text-gray-400 font-bold">Henüz yardım kategorisi eklenmemiş.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Sıkça Sorulan Sorular (SSS) -->
+      <div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h2 class="text-lg sm:text-xl font-black text-white" style="color: #ffffff !important;">Sıkça Sorulan Sorular</h2>
+        </div>
+
+        <div class="space-y-3" id="faq-container">
+          {% for faq in helpCenter.faqs %}
+            <div
+              class="faq-item rounded-3xl border-2 overflow-hidden transition-all duration-300 shadow-lg backdrop-blur-xl"
+              style="
+                background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+              "
+            >
+              <button
+                onclick="toggleFaq(this)"
+                class="w-full flex items-center justify-between p-5 text-left focus:outline-none transition-colors cursor-pointer"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border border-primary/40 text-purple-300" style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2);">
+                    SSS
+                  </span>
+                  <span class="font-black text-white text-sm sm:text-base faq-question" style="color: #ffffff !important;">
+                    {{- faq.question | lexical_html -}}
+                  </span>
+                </div>
+                <div class="w-7 h-7 rounded-xl border flex items-center justify-center text-gray-400 transition-transform duration-300 icon-wrap shrink-0"
+                     style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.1);">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 pt-1 border-t" style="border-color: rgba(255, 255, 255, 0.06);">
+                <div class="prose prose-invert prose-sm max-w-none text-gray-300 font-medium leading-relaxed">
+                  {{ faq.answer | lexical_html }}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="py-10 text-center rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-2"
+                 style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+              <p class="text-xs text-gray-400 font-bold">Sıkça sorulan soru bulunmamaktadır.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- SAĞ KOLON: Destek CTA Kartı (4 Cols) -->
+    <div class="lg:col-span-4 space-y-6">
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-8 sticky top-24 text-center flex flex-col items-center backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(28, 16, 38, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+        "
+      >
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 border shadow-lg"
+             style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-black text-white mb-2" style="color: #ffffff !important;">Aradığınızı Bulamadınız mı?</h3>
+        <p class="text-xs text-gray-300 font-medium mb-6 leading-relaxed">
+          Destek ekibimiz sorularınızı yanıtlamak için hazır. Bir talep oluşturarak anında iletişime geçebilirsiniz.
+        </p>
+        <a
+          href="/support/new"
+          class="w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20 flex items-center justify-center gap-2 text-center"
+          style="
+            background: linear-gradient(135deg, var(--color-primary), #9333ea);
+            box-shadow: 0 10px 25px rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);
+          "
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+          </svg>
+          <span>Destek Talebi Oluştur</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleFaq(btn) {
+    const content = btn.nextElementSibling;
+    const iconWrap = btn.querySelector('.icon-wrap');
+
+    document.querySelectorAll('.faq-content').forEach((el) => {
+      if (el !== content && !el.classList.contains('hidden')) {
+        el.classList.add('hidden');
+        el.previousElementSibling.querySelector('.icon-wrap').classList.remove('rotate-180');
+      }
+    });
+
+    if (content.classList.contains('hidden')) {
+      content.classList.remove('hidden');
+      iconWrap.classList.add('rotate-180');
+    } else {
+      content.classList.add('hidden');
+      iconWrap.classList.remove('rotate-180');
+    }
+  }
+
+  document.getElementById('help-search')?.addEventListener('input', function (e) {
+    const term = e.target.value.toLowerCase();
+    const faqs = document.querySelectorAll('.faq-item');
+    let hasResult = false;
+
+    faqs.forEach((faq) => {
+      const question = faq.querySelector('.faq-question')?.textContent.toLowerCase() || '';
+      const answer = faq.querySelector('.faq-content')?.textContent.toLowerCase() || '';
+
+      if (question.includes(term) || answer.includes(term)) {
+        faq.style.display = 'block';
+        hasResult = true;
+      } else {
+        faq.style.display = 'none';
+      }
+    });
+
+    const container = document.getElementById('faq-container');
+    let noResultMsg = document.getElementById('no-result-msg');
+
+    if (!hasResult && term !== '') {
+      if (!noResultMsg) {
+        noResultMsg = document.createElement('div');
+        noResultMsg.id = 'no-result-msg';
+        noResultMsg.className = 'py-10 text-center text-xs text-gray-400 font-bold';
+        noResultMsg.textContent = 'Aramanızla eşleşen soru bulunamadı.';
+        container.appendChild(noResultMsg);
+      }
+      noResultMsg.style.display = 'block';
+    } else if (noResultMsg) {
+      noResultMsg.style.display = 'none';
+    }
+  });
+</script>

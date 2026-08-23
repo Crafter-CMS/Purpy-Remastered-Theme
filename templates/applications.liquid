@@ -1,0 +1,211 @@
+<!-- ============================================================
+     BAŞVURU MERKEZİ (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold" style="color: var(--color-primary);">Başvuru Merkezi</span>
+  </div>
+
+  <!-- Header -->
+  <div class="flex items-center gap-3.5 mb-8">
+    <div class="w-2 h-10 rounded-full" style="background: linear-gradient(to bottom, var(--color-primary), #9333ea);"></div>
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-wide" style="color: #ffffff !important;">
+        Başvuru Merkezi
+      </h1>
+      <p class="text-xs sm:text-sm font-medium text-gray-300">
+        Açık pozisyonlar için başvuru yapabilir veya önceki başvurularınızın durumunu takip edebilirsiniz.
+      </p>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div
+    class="flex rounded-2xl p-1.5 w-full max-w-sm border shadow-xl backdrop-blur-xl"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <button
+      class="tab-btn flex-1 text-center py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer border shadow"
+      style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.3); color: #ffffff; border-color: var(--color-primary);"
+      data-target="tab-forms"
+    >
+      Mevcut Formlar
+    </button>
+    <button
+      class="tab-btn flex-1 text-center py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-gray-400 hover:text-white border border-transparent cursor-pointer"
+      data-target="tab-my-apps"
+    >
+      Başvurularım
+    </button>
+  </div>
+
+  <!-- Mevcut Formlar -->
+  <div id="tab-forms" class="tab-content block">
+    {% if staffForms.size == 0 %}
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-12 text-center backdrop-blur-xl flex flex-col items-center justify-center gap-3"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center border shadow-lg"
+             style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35); color: var(--color-primary);">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-black text-white" style="color: #ffffff !important;">Aktif Form Bulunamadı</h3>
+        <p class="text-xs text-gray-400 font-medium">Şu anda başvurabileceğiniz aktif bir yetkili alım formu bulunmuyor.</p>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for form in staffForms %}
+          <a
+            href="/applications/{{ form.slug }}"
+            class="group block rounded-3xl border-2 p-6 shadow-2xl transition-all duration-300 hover:border-primary/60 hover:scale-[1.02] backdrop-blur-xl cursor-pointer"
+            style="
+              background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+            "
+          >
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="text-lg font-black text-white group-hover:text-primary transition-colors line-clamp-1" style="color: #ffffff !important;">
+                {{ form.title }}
+              </h3>
+              <svg
+                class="w-5 h-5 text-gray-500 group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </div>
+            <p class="text-xs text-gray-400 font-medium line-clamp-2 mb-6 leading-relaxed">{{ form.description }}</p>
+
+            <div class="flex items-center justify-between text-xs font-bold pt-4 border-t" style="border-color: rgba(255, 255, 255, 0.08);">
+              <span class="flex items-center gap-1.5 text-purple-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                </svg>
+                <span>{{ form.inputs.size }} Soru / Alan</span>
+              </span>
+              {% if form.isActive %}
+                <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded-xl text-[10px] font-black uppercase tracking-wider border border-emerald-500/40 shadow">Aktif</span>
+              {% else %}
+                <span class="px-2.5 py-1 bg-white/5 text-gray-400 rounded-xl text-[10px] font-bold uppercase tracking-wider border border-white/10">Pasif</span>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Başvurularım -->
+  <div id="tab-my-apps" class="tab-content hidden">
+    {% if myApplications.size == 0 %}
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-12 text-center backdrop-blur-xl flex flex-col items-center justify-center gap-3"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center border shadow-lg"
+             style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35); color: var(--color-primary);">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-black text-white" style="color: #ffffff !important;">Henüz Başvurunuz Yok</h3>
+        <p class="text-xs text-gray-400 font-medium">Gönderdiğiniz herhangi bir yetkili alım başvurusu bulunmuyor.</p>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for app in myApplications %}
+          <div
+            class="rounded-3xl border-2 p-6 shadow-2xl backdrop-blur-xl flex flex-col justify-between"
+            style="
+              background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+            "
+          >
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <h3 class="text-base font-black text-white line-clamp-1" style="color: #ffffff !important;">{{ app.formTitle }}</h3>
+                <span class="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider border shadow
+                  {% if app.status == 'APPROVED' %}bg-emerald-500/20 text-emerald-300 border-emerald-500/40
+                  {% elsif app.status == 'REJECTED' %}bg-rose-500/20 text-rose-300 border-rose-500/40
+                  {% else %}bg-amber-500/20 text-amber-300 border-amber-500/40{% endif %}">
+                  {% if app.status == 'APPROVED' %}Onaylandı
+                  {% elsif app.status == 'REJECTED' %}Reddedildi
+                  {% else %}İnceleniyor{% endif %}
+                </span>
+              </div>
+              <p class="text-[11px] text-gray-400 font-medium mb-4">
+                Başvuru Tarihi: {{ app.createdAt | date: '%d.%m.%Y %H:%M' }}
+              </p>
+            </div>
+            
+            {% if app.reason %}
+              <div class="p-3 rounded-2xl border text-xs text-gray-300" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+                <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">Açıklama / Not:</div>
+                <div class="line-clamp-3">{{ app.reason }}</div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.style.background = 'transparent';
+          b.style.borderColor = 'transparent';
+          b.style.color = '#9ca3af';
+        });
+
+        btn.style.background = 'rgba(var(--color-primary-rgb, 124, 58, 237), 0.3)';
+        btn.style.borderColor = 'var(--color-primary)';
+        btn.style.color = '#ffffff';
+
+        const target = btn.dataset.target;
+        tabContents.forEach(content => {
+          if (content.id === target) {
+            content.classList.remove('hidden');
+            content.classList.add('block');
+          } else {
+            content.classList.add('hidden');
+            content.classList.remove('block');
+          }
+        });
+      });
+    });
+  });
+</script>

@@ -1,0 +1,46 @@
+<!-- ============================================================
+     ÖZEL SAYFA (PAGE) (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold line-clamp-1" style="color: var(--color-primary);">{{ page.title }}</span>
+  </div>
+
+  <div class="max-w-4xl mx-auto">
+    <div
+      class="rounded-3xl border-2 shadow-2xl p-6 sm:p-12 backdrop-blur-xl relative overflow-hidden"
+      style="
+        background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+      "
+    >
+      <header class="mb-10 pb-8 text-center border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3" style="color: #ffffff !important;">
+          {{ page.title }}
+        </h1>
+        {% if page.metaDescription %}
+          <p class="text-sm sm:text-base text-gray-300 font-medium max-w-2xl mx-auto leading-relaxed">
+            {{ page.metaDescription }}
+          </p>
+        {% endif %}
+      </header>
+
+      <article class="prose prose-invert prose-lg max-w-none text-gray-200 font-medium leading-relaxed prose-headings:text-white prose-a:text-purple-400 hover:prose-a:text-purple-300 prose-img:rounded-2xl">
+        {{ page.content }}
+      </article>
+    </div>
+  </div>
+</div>

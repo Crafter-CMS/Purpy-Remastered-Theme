@@ -1,0 +1,393 @@
+<!-- ============================================================
+     DESTEK TALEBİ DETAYI (Purpy Remastered Dark Luxury)
+     ============================================================ -->
+<div class="w-full max-w-[1250px] mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 min-h-[60vh]">
+  <!-- Breadcrumb -->
+  <div
+    class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-2xl border backdrop-blur-md w-fit shadow-lg"
+    style="
+      background: linear-gradient(135deg, rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.85));
+      border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+    "
+  >
+    <a href="/" class="hover:text-primary transition-colors flex items-center gap-1.5" style="color: #cbd5e1;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </a>
+    <span class="text-gray-500">/</span>
+    <a href="/support" class="hover:text-primary transition-colors" style="color: #cbd5e1;">Destek Merkezi</a>
+    <span class="text-gray-500">/</span>
+    <span class="font-bold line-clamp-1 max-w-[200px]" style="color: var(--color-primary);">{{ ticket.title }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- SOL / ORTA: Mesajlaşma Akışı (8 Cols) -->
+    <main class="lg:col-span-8 space-y-6">
+      <!-- Talep Başlık Kartı -->
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-6 sm:p-8 backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <h1 class="text-xl sm:text-2xl font-black text-white" style="color: #ffffff !important;">{{ ticket.title }}</h1>
+          <div class="flex-shrink-0">
+            {% if ticket.status == 'OPEN' %}
+              <span class="px-3.5 py-1.5 bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-black uppercase tracking-wider border border-emerald-500/40 shadow">
+                Açık
+              </span>
+            {% elsif ticket.status == 'REPLIED' %}
+              <span class="px-3.5 py-1.5 bg-blue-500/20 text-blue-300 rounded-xl text-xs font-black uppercase tracking-wider border border-blue-500/40 shadow">
+                Yanıtlandı
+              </span>
+            {% elsif ticket.status == 'CLOSED' %}
+              <span class="px-3.5 py-1.5 bg-white/5 text-gray-400 rounded-xl text-xs font-bold uppercase tracking-wider border border-white/10">
+                Kapalı
+              </span>
+            {% else %}
+              <span class="px-3.5 py-1.5 bg-white/5 text-gray-400 rounded-xl text-xs font-bold uppercase tracking-wider border border-white/10">
+                {{ ticket.status }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="text-xs font-bold text-gray-400 flex items-center gap-2">
+          <span>Talep No:</span>
+          <span class="font-mono text-purple-300 uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-lg border border-white/10">
+            #{{ ticket.id | slice: 0, 8 }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Mesaj Listesi -->
+      <div class="space-y-6">
+        {% for message in ticket.messages %}
+          {% assign isCustomer = false %}
+          {% if message.senderId == customer.id %}
+            {% assign isCustomer = true %}
+          {% endif %}
+
+          <div class="flex gap-4 {% if isCustomer %}flex-row-reverse{% endif %}">
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+              <img
+                src="https://mc-heads.net/avatar/{{ message.sender.username }}/48"
+                class="w-11 h-11 rounded-2xl border-2 shadow-lg {% if isCustomer %}border-primary/50{% else %}border-white/20{% endif %}"
+                alt="{{ message.sender.username }}"
+              >
+            </div>
+
+            <!-- Balon -->
+            <div class="max-w-[85%]">
+              <div class="flex items-center gap-2 mb-1.5 {% if isCustomer %}justify-end{% endif %}">
+                <span class="text-xs font-black {% if isCustomer %}text-purple-300{% else %}text-white{% endif %}" {% unless isCustomer %}style="color: #ffffff !important;"{% endunless %}>
+                  {{ message.sender.username }}
+                </span>
+                <span class="text-[10px] font-semibold text-gray-400" id="date-{{ forloop.index }}"></span>
+              </div>
+
+              <div
+                class="p-5 sm:p-6 rounded-3xl border-2 backdrop-blur-xl shadow-xl leading-relaxed {% if isCustomer %}rounded-tr-sm{% else %}rounded-tl-sm{% endif %}"
+                style="
+                  {% if isCustomer %}
+                    background: linear-gradient(135deg, rgba(38, 20, 52, 0.95), rgba(24, 12, 34, 0.95));
+                    border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.40);
+                  {% else %}
+                    background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+                    border-color: rgba(255, 255, 255, 0.12);
+                  {% endif %}
+                "
+              >
+                <div class="prose prose-invert prose-sm max-w-none text-gray-200 break-words lexical-content">
+                  {{ message.content | lexical_html }}
+                </div>
+              </div>
+            </div>
+
+            <script>
+              document.getElementById('date-{{ forloop.index }}').innerText = new Date(
+                '{{ message.createdAt }}'
+              ).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+            </script>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Cevap Yazma Formu -->
+      {% if ticket.status != 'CLOSED' %}
+        <div
+          class="rounded-3xl border-2 shadow-2xl p-6 md:p-8 mt-8 backdrop-blur-xl"
+          style="
+            background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+          "
+        >
+          <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2 pb-3 border-b" style="color: #ffffff !important; border-color: rgba(255, 255, 255, 0.08);">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+              </svg>
+            </div>
+            <span>Yanıt Yaz</span>
+          </h3>
+          <form id="replyForm" class="space-y-4">
+            <div
+              class="rounded-2xl border-2 overflow-hidden flex flex-col shadow-inner"
+              style="background: rgba(14, 9, 20, 0.85); border-color: rgba(255, 255, 255, 0.1);"
+            >
+              <!-- Toolbar -->
+              <div class="flex flex-wrap items-center gap-1 p-2.5 border-b" style="background: rgba(20, 12, 28, 0.8); border-color: rgba(255, 255, 255, 0.08);">
+                <button type="button" id="bold-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Kalın">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"/></svg>
+                </button>
+                <button type="button" id="italic-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="İtalik">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 20l4-16m4 4l-4 16M6 16l4-16"/></svg>
+                </button>
+                <button type="button" id="underline-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Altı Çizili">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3m-6 18h6"/></svg>
+                </button>
+                <button type="button" id="strike-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Üstü Çizili">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 12h14M8 6h8a2 2 0 010 4H8a2 2 0 010-4zM8 14h8a2 2 0 000 4H8a2 2 0 000-4z"/></svg>
+                </button>
+                <div class="w-px h-5 mx-1" style="background: rgba(255, 255, 255, 0.1);"></div>
+                <button type="button" id="left-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Sola Hizala">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"/></svg>
+                </button>
+                <button type="button" id="center-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Ortala">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M4 18h16"/></svg>
+                </button>
+                <button type="button" id="right-btn" class="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer" title="Sağa Hizala">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M4 18h16"/></svg>
+                </button>
+              </div>
+              <div
+                id="lexical-editor"
+                class="min-h-[160px] p-5 outline-none text-sm text-white font-sans cursor-text"
+                contenteditable="true"
+              ></div>
+            </div>
+            <div class="flex justify-end pt-2">
+              <button
+                type="submit"
+                class="px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20 cursor-pointer flex items-center justify-center gap-2"
+                style="
+                  background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                  box-shadow: 0 10px 25px rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);
+                "
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+                <span>Yanıtı Gönder</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      {% else %}
+        <div
+          class="rounded-3xl border-2 p-6 text-center mt-8 backdrop-blur-xl shadow-xl"
+          style="background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.08);"
+        >
+          <svg class="w-8 h-8 text-gray-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <p class="font-black text-white text-sm" style="color: #ffffff !important;">Bu destek talebi kapatılmıştır.</p>
+          <p class="text-xs font-medium text-gray-400 mt-1">Kapatılan taleplere yeni mesaj gönderilemez.</p>
+        </div>
+      {% endif %}
+    </main>
+
+    <!-- SAĞ: Talep Detayları Sidebar (4 Cols) -->
+    <aside class="lg:col-span-4 space-y-6">
+      <div
+        class="rounded-3xl border-2 shadow-2xl p-6 backdrop-blur-xl sticky top-24"
+        style="
+          background: linear-gradient(135deg, rgba(28, 16, 38, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);
+        "
+      >
+        <h3 class="font-black text-white mb-6 pb-3 border-b text-sm flex items-center gap-2" style="color: #ffffff !important; border-color: rgba(255, 255, 255, 0.08);">
+          <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Talep Bilgileri</span>
+        </h3>
+
+        <div class="space-y-4">
+          <div class="p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1.5">Oluşturan</div>
+            <div class="flex items-center gap-2 font-bold text-white text-xs">
+              <img
+                src="https://mc-heads.net/avatar/{{ ticket.createdByUser.username }}/28"
+                class="w-6 h-6 rounded-lg border border-primary/30"
+                alt=""
+              >
+              <span>{{ ticket.createdByUser.username }}</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">Oluşturulma Tarihi</div>
+            <div class="font-semibold text-xs text-gray-300" id="ticket-created-at"></div>
+          </div>
+
+          <div class="p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">Son Güncelleme</div>
+            <div class="font-semibold text-xs text-gray-300" id="ticket-updated-at"></div>
+          </div>
+
+          {% if ticket.category %}
+            <div class="p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+              <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">Kategori</div>
+              <div class="font-semibold text-xs text-gray-300">{{ ticket.category.name }}</div>
+            </div>
+          {% endif %}
+
+          <div class="p-3 rounded-2xl border" style="background: rgba(14, 9, 20, 0.6); border-color: rgba(255, 255, 255, 0.08);">
+            <div class="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1.5">Atanan Yetkililer</div>
+            {% if ticket.assignedUsers and ticket.assignedUsers.size > 0 %}
+              <div class="flex flex-wrap gap-1.5 mt-1">
+                {% for staff in ticket.assignedUsers %}
+                  <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold text-purple-300 border-primary/30"
+                       style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);">
+                    <img src="https://mc-heads.net/avatar/{{ staff.username }}/20" class="w-4 h-4 rounded-sm" alt="">
+                    <span>{{ staff.username }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-xs font-semibold text-gray-400">Henüz yetkili atanmadı.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<style>
+  .editor-text-bold { font-weight: bold; }
+  .editor-text-italic { font-style: italic; }
+  .editor-text-underline { text-decoration: underline; }
+  .editor-text-strikethrough { text-decoration: line-through; }
+  .editor-text-underlineStrikethrough { text-decoration: underline line-through; }
+</style>
+
+<script type="module">
+  import { createEditor, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND } from 'https://esm.sh/lexical@0.14.5';
+  import { registerRichText } from 'https://esm.sh/@lexical/rich-text@0.14.5';
+
+  document.getElementById('ticket-created-at').innerText = new Date('{{ ticket.createdAt }}').toLocaleDateString(
+    'tr-TR',
+    { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+  );
+  document.getElementById('ticket-updated-at').innerText = new Date('{{ ticket.updatedAt }}').toLocaleDateString(
+    'tr-TR',
+    { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+  );
+
+  window.lexicalContentJSON = null;
+
+  const myTheme = {
+    text: {
+      bold: 'editor-text-bold',
+      italic: 'editor-text-italic',
+      underline: 'editor-text-underline',
+      strikethrough: 'editor-text-strikethrough',
+      underlineStrikethrough: 'editor-text-underlineStrikethrough',
+    },
+  };
+
+  const config = {
+    namespace: 'SupportReplyTicket',
+    theme: myTheme,
+    onError: (error) => {
+      console.error('Lexical Hatası:', error);
+    },
+  };
+
+  const editor = createEditor(config);
+  const editorElement = document.getElementById('lexical-editor');
+
+  if (editorElement) {
+    editor.setRootElement(editorElement);
+    registerRichText(editor);
+
+    document.getElementById('bold-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+    });
+    document.getElementById('italic-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+    });
+    document.getElementById('underline-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+    });
+    document.getElementById('strike-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+    });
+
+    document.getElementById('left-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+    });
+    document.getElementById('center-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+    });
+    document.getElementById('right-btn')?.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
+    });
+
+    editor.registerUpdateListener(({ editorState }) => {
+      editorState.read(() => {
+        window.lexicalContentJSON = editorState.toJSON();
+      });
+    });
+  }
+
+  document.getElementById('replyForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!window.lexicalContentJSON || !window.lexicalContentJSON.root.children.length) {
+      window.showToast?.('Lütfen bir mesaj yazın.', 'error');
+      return;
+    }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<div class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></div> <span>Gönderiliyor...</span>';
+
+    const ticketId = '{{ ticket.id }}';
+
+    try {
+      const res = await fetch(`/api/storefront/v2/tickets/${ticketId}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: window.lexicalContentJSON }),
+      });
+      const result = await res.json();
+
+      if (result.success || res.ok) {
+        window.showToast?.('Yanıtınız başarıyla gönderildi!', 'success');
+        window.location.reload();
+      } else {
+        window.showToast?.(result.message || 'Bir hata oluştu.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    } catch (err) {
+      window.showToast?.('Bağlantı hatası.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  });
+</script>

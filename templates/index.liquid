@@ -1,0 +1,1016 @@
+<!-- ============================================================
+     ANA SAYFA (Postlar + SupportersCard + PatronCards)
+     ============================================================ -->
+<div class="w-full max-w-[1350px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+    <!-- ============================================================
+         SOL SÜTUN: GÖNDERİLER (~65% / 8 Cols)
+         ============================================================ -->
+    <div class="lg:col-span-8 flex flex-col gap-6 w-full">
+      {% if posts.size > 0 %}
+        {% for post in posts limit: 6 %}
+          {% assign post_type = post.type | default: 'haber' %}
+          <a
+            href="/posts/{{ post.slug }}"
+            class="group relative block w-full rounded-2xl overflow-hidden transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-2xl border-2 cursor-pointer"
+            style="
+              background: var(--bg-card, #1a1020);
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+              box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            "
+            onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.5)';"
+            onmouseout="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.15)';"
+          >
+            <!-- Header Badges (Absolute on top of image) -->
+            <div class="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 flex items-center gap-2">
+              <span
+                class="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider text-white shadow-lg backdrop-blur-md"
+                style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.85); border: 1px solid rgba(255,255,255,0.2);"
+              >
+                {% if post_type == 'update' or post_type == 'guncelleme' -%}
+                  GÜNCELLEME
+                {% elsif post_type == 'announcement' or post_type == 'duyuru' -%}
+                  DUYURU
+                {% elsif post_type == 'blog' -%}
+                  BLOG
+                {% else -%}
+                  HABER
+                {%- endif %}
+              </span>
+            </div>
+
+            {% if post.isHot or post.isPinned %}
+              <div class="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 flex items-center gap-2">
+                <span
+                  class="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider text-white shadow-lg backdrop-blur-md {% if post.isHot %}bg-red-600/90{% else %}bg-primary/90{% endif %}"
+                  style="border: 1px solid rgba(255,255,255,0.2);"
+                >
+                  {% if post.isHot %}🔥 HOT{% else %}📌 SABİT{% endif %}
+                </span>
+              </div>
+            {% endif %}
+
+            <!-- Görsel -->
+            <div class="relative w-full h-44 sm:h-56 md:h-64 overflow-hidden bg-black/40">
+              <img
+                src="{% if post.featuredImage != blank %}{{ post.featuredImage }}{% else %}https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop{% endif %}"
+                alt="{{ post.title }}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              >
+              <div class="absolute inset-0 bg-gradient-to-t from-[#1a1020] via-transparent to-black/20"></div>
+            </div>
+
+            <!-- İçerik -->
+            <div class="p-4 sm:p-6">
+              <h2 class="text-lg sm:text-xl md:text-2xl font-black text-white line-clamp-2 group-hover:text-primary transition-colors leading-tight mb-2">
+                {{ post.title }}
+              </h2>
+              <p class="text-xs sm:text-sm line-clamp-2 sm:line-clamp-3 leading-relaxed mb-4" style="color: var(--color-text-secondary, #a89db8);">
+                {% if post.metaDescription != blank %}
+                  {{ post.metaDescription }}
+                {% else %}
+                  {{ post.content | lexical_text | default: post.excerpt | default: 'Detayları incelemek ve içeriğe göz atmak için tıklayın...' }}
+                {% endif %}
+              </p>
+
+              <!-- Footer Bilgileri -->
+              <div class="flex items-center justify-between pt-4 border-t" style="border-color: rgba(255,255,255,0.06);">
+                <div class="flex items-center gap-2.5">
+                  {% assign author_name = post.author.username | default: post.authorName | default: 'Yönetici' %}
+                  <img
+                    src="https://mc-heads.net/avatar/{{ author_name }}/32"
+                    alt="{{ author_name }}"
+                    class="rounded-full w-7 h-7 sm:w-8 sm:h-8 border border-primary/30 object-cover"
+                  >
+                  <span class="font-bold text-xs sm:text-sm text-white truncate max-w-[140px] sm:max-w-none">
+                    {{ author_name }}
+                  </span>
+                  <span class="text-xs text-muted-foreground hidden sm:inline" style="color: var(--text-muted, #7a6e8a);">
+                    &bull; {{ post.createdAt | date: '%d.%m.%Y' }}
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-4 text-xs sm:text-sm font-semibold" style="color: var(--color-text-secondary, #a89db8);">
+                  <div class="flex items-center gap-1.5 hover:text-red-400 transition-colors">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" class="text-red-500">
+                      <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                    </svg>
+                    <span>{{ post.likeCount | default: 0 }}</span>
+                  </div>
+                  <div class="flex items-center gap-1 text-primary font-bold">
+                    <span>Oku</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+
+      {% else %}
+        <div
+          class="p-12 text-center rounded-2xl border-2 border-dashed"
+          style="background: rgba(26,16,32,0.5); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2);"
+        >
+          <svg class="w-16 h-16 mx-auto mb-4 opacity-30 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
+          <h3 class="text-lg font-bold text-white mb-1">Henüz gönderi bulunmuyor</h3>
+          <p class="text-sm text-muted-foreground" style="color: var(--color-text-secondary);">Yakında yeni duyurular ve haberler eklenecektir.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- ============================================================
+         SAĞ SÜTUN: SPOTLIGHT BANNER + SUPPORTERS CARD + DISCORD (~35% / 4 Cols)
+         ============================================================ -->
+    <div class="lg:col-span-4 flex flex-col gap-6 w-full">
+      {% assign payments_list = statistic.latest.payments | default: statistics.latest.payments | default: stats.latest.payments | default: statistic.payments | default: statistics.payments | default: stats.payments %}
+      {% assign top_payment = payments_list.first %}
+
+      <!-- Öne Çıkan Etkinlik / Tanıtım Banner (Spotlight) -->
+      {% if settings.home.spotlight_enabled != false %}
+        <div
+          class="relative rounded-2xl p-5 sm:p-6 shadow-xl border-2 overflow-hidden group hover:border-primary/60 transition-all duration-300 backdrop-blur-xl"
+          style="
+            background: linear-gradient(135deg, rgba(38, 20, 52, 0.95), rgba(18, 10, 24, 0.95));
+            border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+          "
+        >
+          <!-- Background Ambient Glow -->
+          <div
+            class="absolute -top-12 -right-12 w-36 h-36 rounded-full blur-2xl opacity-30 pointer-events-none"
+            style="background: radial-gradient(circle, var(--color-primary), transparent 70%);"
+          ></div>
+
+          {% if settings.home.spotlight_image %}
+            <div class="w-full h-32 rounded-xl overflow-hidden mb-4 border border-white/10 relative">
+              <img
+                src="{{ settings.home.spotlight_image }}"
+                alt="{{ settings.home.spotlight_title | default: 'Etkinlik' }}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              >
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+          {% endif %}
+
+          <div class="relative z-10">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-black uppercase tracking-wider mb-2.5 shadow"
+                 style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+              <div class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: var(--color-primary);"></div>
+              <span>{{ settings.home.spotlight_badge | default: 'ÖZEL ETKİNLİK' }}</span>
+            </div>
+
+            <h3 class="text-lg font-black text-white mb-1.5 leading-tight group-hover:text-primary transition-colors" style="color: #ffffff !important;">
+              {{ settings.home.spotlight_title | default: 'Yeni Sezon & Turnuva Başladı!' }}
+            </h3>
+
+            <p class="text-xs text-gray-300 font-medium line-clamp-3 mb-4 leading-relaxed">
+              {{ settings.home.spotlight_description | default: 'En yeni zindanlar, özel eşyalar ve turnuva ödülleri seni bekliyor. Hemen katıl ve liderlik tablosundaki yerini al!' }}
+            </p>
+
+            <a
+              href="{{ settings.home.spotlight_button_url | default: '/store' }}"
+              class="w-full py-3 px-4 rounded-xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 border border-white/20 text-center"
+              style="
+                background: linear-gradient(135deg, var(--color-primary), #9333ea);
+                box-shadow: 0 8px 20px rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+              "
+            >
+              <span>{{ settings.home.spotlight_button_text | default: 'Hemen Katıl' }}</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- SupportersCard (Kredi Yükleyenler) -->
+      <div
+        id="supporters-card-container"
+        class="relative rounded-2xl p-4 sm:p-6 shadow-xl border-2 overflow-hidden"
+        style="
+          background: linear-gradient(135deg, rgba(26, 16, 32, 0.95), rgba(18, 10, 24, 0.95));
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <!-- Decorative corner accent -->
+        <div
+          class="absolute top-0 right-0 w-32 h-32 rounded-bl-full pointer-events-none"
+          style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.12);"
+        ></div>
+
+        <!-- Header -->
+        <div class="relative flex items-center gap-3 mb-5">
+          <div
+            class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl"
+            style="background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 124, 58, 237), 0.25), rgba(var(--color-primary-rgb, 124, 58, 237), 0.10)); color: var(--color-primary);"
+          >
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black uppercase text-white tracking-wide">
+              {{ settings.home.supporters_title | default: 'Kredi Yükleyenler' }}
+            </h2>
+            <p class="text-xs text-gray-400">{{ settings.home.supporters_description | default: 'En son destekleyenler' }}</p>
+          </div>
+        </div>
+
+        <!-- Top Supporter Section (Lider / Son Destekleyen) -->
+        <div id="top-supporter-wrapper">
+          {% if top_payment %}
+            <div
+              class="relative rounded-2xl p-4 sm:p-6 mb-5 flex flex-col items-center gap-4 shadow-2xl border-2 overflow-hidden group hover:border-primary/60 transition-all duration-300"
+              style="
+                background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 124, 58, 237), 0.15), rgba(26, 16, 32, 0.85), rgba(18, 10, 24, 0.90));
+                border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.40);
+              "
+            >
+              <!-- Animated background gradient -->
+              <div
+                class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style="background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 124, 58, 237), 0.25), transparent, rgba(140, 80, 220, 0.25));"
+              ></div>
+
+              <!-- Spotlight effect -->
+              <div
+                class="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-500 pointer-events-none"
+                style="background-color: var(--color-primary);"
+              ></div>
+
+              <!-- Top Badge (Lider) -->
+              <div class="absolute top-3 right-3 z-20">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-yellow-500/90 to-yellow-600/90 backdrop-blur-sm shadow-lg border border-yellow-400/50">
+                  <svg class="w-4 h-4 text-white fill-white drop-shadow-md" viewBox="0 0 24 24">
+                    <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+                  </svg>
+                  <span class="text-xs font-black text-white uppercase tracking-wider">Lider</span>
+                </div>
+              </div>
+
+              <!-- Character 3D Render with Glow Ring -->
+              <div class="relative z-10 group/render mt-2">
+                <div class="relative">
+                  <!-- Glow ring -->
+                  <div
+                    class="absolute inset-0 -m-4 rounded-full blur-2xl group-hover/render:blur-3xl transition-all duration-300 pointer-events-none"
+                    style="background: linear-gradient(to bottom, rgba(var(--color-primary-rgb, 124, 58, 237), 0.35), transparent);"
+                  ></div>
+
+                  <!-- Character image -->
+                  <div class="relative transition-all duration-300 group-hover/render:scale-110">
+                    <img
+                      id="top-supporter-img"
+                      src="https://starlightskins.lunareclipse.studio/render/lunging/{{ top_payment.username }}/bust?format=webp"
+                      onerror="this.onerror=null; this.src='https://mc-heads.net/avatar/{{ top_payment.username }}/160';"
+                      alt="{{ top_payment.username }}"
+                      class="h-auto w-[140px] sm:w-[180px] md:w-[200px] object-contain drop-shadow-2xl"
+                      style="image-rendering: crisp-edges;"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- User info -->
+              <div class="text-center flex-1 w-full relative z-10">
+                <div class="inline-flex items-center justify-center gap-2 mb-2">
+                  <div class="w-8 h-0.5 rounded-full" style="background: linear-gradient(to right, transparent, rgba(var(--color-primary-rgb, 124, 58, 237), 0.5));"></div>
+                  <h3
+                    id="top-supporter-name"
+                    class="font-black text-xl sm:text-2xl md:text-3xl transition-all duration-300"
+                    style="background: linear-gradient(to right, #e9d5ff, #ffffff, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #ffffff !important;"
+                  >
+                    {{ top_payment.username }}
+                  </h3>
+                  <div class="w-8 h-0.5 rounded-full" style="background: linear-gradient(to left, transparent, rgba(var(--color-primary-rgb, 124, 58, 237), 0.5));"></div>
+                </div>
+
+                <div class="flex flex-col items-center gap-2">
+                  <div
+                    class="px-4 py-1.5 rounded-full border backdrop-blur-sm"
+                    style="background: rgba(18, 10, 24, 0.7); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);"
+                  >
+                    <span class="text-xs sm:text-sm font-bold uppercase tracking-wide" style="color: #ffffff !important;">
+                      Son Destekleyen
+                    </span>
+                  </div>
+
+                  <div class="flex items-center gap-2 text-xs font-medium" style="color: #cbd5e1 !important;">
+                    <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style="background-color: var(--color-primary);"></div>
+                    <span id="top-supporter-amount" style="color: #ffffff !important; font-weight: 700;">₺{{ top_payment.amount }}</span>
+                    <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style="background-color: var(--color-primary);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Supporters Grid with Hover Floating Tooltips -->
+            <div
+              id="supporters-grid"
+              class="relative grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl border backdrop-blur-sm"
+              style="background: rgba(14, 9, 20, 0.6); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);"
+            >
+              {% for payment in payments_list limit: 12 %}
+                <div class="relative group block">
+                  <div
+                    class="relative aspect-square w-full overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-110 hover:-translate-y-1 border-2 border-transparent cursor-pointer"
+                    onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.6)';"
+                    onmouseout="this.style.borderColor='transparent';"
+                  >
+                    <img
+                      src="https://mc-heads.net/avatar/{{ payment.username }}/80"
+                      alt="{{ payment.username }}"
+                      class="w-full h-full object-cover"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+
+                  <!-- Floating Tooltip on Hover -->
+                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 z-30 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 group-hover:translate-y-0 translate-y-2">
+                    <div
+                      class="border-2 rounded-xl px-3 py-2 shadow-2xl text-xs font-semibold flex flex-col items-center min-w-[130px] backdrop-blur-md"
+                      style="
+                        background: linear-gradient(135deg, #1a1020, rgba(26, 16, 32, 0.95));
+                        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.5);
+                      "
+                    >
+                      <span class="text-gray-400 mb-1 text-[11px]">
+                        {{ payment.paymentMethod | default: 'Kredi Yükleme' }}
+                      </span>
+                      <span class="text-lg font-black" style="color: var(--color-primary);">
+                        ₺{{ payment.amount }}
+                      </span>
+                      <span class="text-[10px] text-gray-300 font-bold mt-1">
+                        {{ payment.username }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+          {% else %}
+            <!-- Empty State for Supporters -->
+            <div
+              class="p-8 my-2 text-center rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3"
+              style="background: rgba(14, 9, 20, 0.5); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);"
+            >
+              <div
+                class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg"
+                style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.15); color: var(--color-primary);"
+              >
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div class="text-center">
+                <h3 class="text-base font-bold text-white mb-1">Henüz Kredi Yükleyen Yok</h3>
+                <p class="text-xs text-gray-400 max-w-xs">İlk destekleyen olmak için hemen bakiye yükleyip sunucumuza güç katabilirsiniz!</p>
+              </div>
+              <a
+                href="/wallet"
+                class="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-lg transition-all duration-300 hover:scale-105"
+                style="background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 70%, black));"
+              >
+                <i class="fa-solid fa-wallet"></i>
+                <span>Kredi Yükle</span>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Discord Widget -->
+      {% assign discord_id = settings.discord.guild_id | default: '1256991995147190272' %}
+      <div
+        class="rounded-2xl overflow-hidden shadow-2xl border-2"
+        style="
+          background: rgba(26, 16, 32, 0.95);
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <iframe
+          src="https://discord.com/widget?id={{ discord_id }}&theme=dark"
+          width="100%"
+          height="450"
+          allowtransparency="true"
+          frameborder="0"
+          sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ÖNE ÇIKAN VİTRİN / DUYURU BANNERI (Destekçiler Öncesi)
+       ============================================================ -->
+  <div class="relative w-full mt-12 sm:mt-16">
+    <div
+      class="relative w-full rounded-3xl overflow-hidden border-2 shadow-2xl p-6 sm:p-10 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 backdrop-blur-2xl"
+      style="
+        background: linear-gradient(135deg, rgba(28, 16, 40, 0.95) 0%, rgba(14, 9, 20, 0.98) 100%);
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(var(--color-primary-rgb, 124, 58, 237), 0.15);
+      "
+    >
+      <!-- Background Ambient Image & Gradient Lighting -->
+      <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-25">
+        <img
+          src="{% if settings.spotlight.image %}{{ settings.spotlight.image }}{% else %}https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop{% endif %}"
+          alt="Spotlight Banner"
+          class="w-full h-full object-cover scale-105 blur-[1px]"
+        >
+        <div class="absolute inset-0 bg-gradient-to-r from-[#140a1c] via-[#140a1c]/85 to-transparent"></div>
+      </div>
+      <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-3xl opacity-25 pointer-events-none" style="background: var(--color-primary);"></div>
+
+      <!-- Sol İçerik: Yazı & Başlıklar -->
+      <div class="relative z-10 max-w-2xl space-y-4 text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border shadow-md"
+             style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.20); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.45); color: var(--color-primary);">
+          <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+          <span>{{ settings.spotlight.badge | default: '🔥 ÖNE ÇIKAN DUYURU & ETKİNLİK' }}</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight tracking-tight" style="color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+          {{ settings.spotlight.title | default: 'Büyük Sezon Güncellemesi & Özel Turnuvalar Başladı!' }}
+        </h2>
+
+        <p class="text-xs sm:text-sm md:text-base font-medium leading-relaxed" style="color: #cbd5e1 !important;">
+          {{ settings.spotlight.description | default: 'Yeni zindanlar, eşsiz kozmetikler, bakiye ödüllü turnuvalar ve VIP çekilişleri seni bekliyor. Hemen sunucumuza katıl, yerini al ve efsaneler arasına katıl!' }}
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4 pt-3">
+          <a
+            href="{{ settings.spotlight.button_url | default: '/store' }}"
+            class="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/25 cursor-pointer"
+            style="
+              background: linear-gradient(135deg, var(--color-primary), #9333ea);
+              box-shadow: 0 10px 25px rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);
+            "
+          >
+            <span>{{ settings.spotlight.button_text | default: 'Hemen Keşfet' }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+
+          <!-- IP Kopyalama Butonu -->
+          <button
+            onclick="copyIp('{{ settings.server_ip | default: 'mc.hypixel.net' }}')"
+            class="inline-flex items-center justify-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-xs sm:text-sm tracking-wide text-white transition-all duration-300 hover:scale-105 border-2 hover:border-emerald-500/60 cursor-pointer shadow-lg group"
+            style="
+              background: linear-gradient(135deg, rgba(20, 32, 26, 0.90), rgba(12, 18, 16, 0.90));
+              border-color: rgba(16, 185, 129, 0.35);
+            "
+          >
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-black text-emerald-300 font-mono tracking-wider">{{ settings.server_ip | default: 'mc.hypixel.net' }}</span>
+            <span class="text-xs font-semibold text-gray-300 border-l border-white/10 pl-2 group-hover:text-white">Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sağ İçerik: Görsel / Özellik Rozetleri -->
+      <div class="relative z-10 flex-shrink-0 w-full lg:w-auto flex justify-center">
+        <div class="relative p-6 rounded-3xl border-2 backdrop-blur-xl flex flex-col items-center justify-center text-center max-w-[280px] sm:max-w-[320px] shadow-2xl"
+             style="background: rgba(20, 12, 28, 0.85); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.30);">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-3 shadow-lg border animate-bounce"
+               style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.5); color: var(--color-primary);">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+          </div>
+          <h3 class="font-black text-base text-white mb-1" style="color: #ffffff !important;">Özel Sezon Fırsatı</h3>
+          <p class="text-xs font-semibold text-purple-300 mb-4">Tüm Mağaza Alışverişlerinde %25 Bonus Kredi Fırsatı!</p>
+          <a href="/store" class="w-full py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-white text-center shadow-lg transition-all hover:scale-105 hover:brightness-110 border border-white/20"
+             style="background: linear-gradient(135deg, var(--color-primary), #9333ea);">
+            Fırsatları Gör →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ALT BÖLÜM: TOPLULUK & DESTEKÇİLER (ÖZEL 3 KATMANLI DÜZEN)
+       ============================================================ -->
+  {% assign purchases_data = statistic.latest.purchases | default: statistics.latest.purchases | default: stats.latest.purchases | default: statistic.purchases | default: statistics.purchases | default: stats.purchases %}
+  {% assign payments_data = statistic.latest.payments | default: statistics.latest.payments | default: stats.latest.payments | default: statistic.payments | default: statistics.payments | default: stats.payments %}
+  {% assign signups_data = statistic.latest.signups | default: statistics.latest.signups | default: stats.latest.signups | default: statistic.signups | default: statistics.signups | default: stats.signups %}
+
+  <div class="relative w-full mt-14 sm:mt-20 space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col items-center text-center space-y-2 mb-4">
+      <h2
+        class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white"
+        style="color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5);"
+      >
+        Topluluk & Destekçiler
+      </h2>
+      <p class="text-xs sm:text-sm max-w-xl font-medium" style="color: #94a3b8 !important;">
+        Sunucumuza destek veren ve topluluğumuza yeni katılan tüm oyuncularımız.
+      </p>
+    </div>
+
+    <!-- ================= ROW 1: SOLDA SON SATIN ALIMLAR | SAĞDA MAĞAZA TANITIMI ================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <!-- SOL (7 Cols): Son Satın Alımlar -->
+      <div
+        class="lg:col-span-7 rounded-3xl p-6 sm:p-7 border-2 shadow-2xl flex flex-col relative overflow-hidden backdrop-blur-xl"
+        style="
+          background: linear-gradient(180deg, rgba(28, 16, 38, 0.92) 0%, rgba(16, 9, 24, 0.96) 100%);
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25);
+        "
+      >
+        <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+
+        <div class="flex items-center justify-between pb-4 mb-4 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+                 style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border: 1px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);">
+              <svg class="w-5 h-5" style="color: var(--color-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-black text-sm uppercase text-white tracking-wide" style="color: #ffffff !important;">Son Satın Alımlar</h3>
+              <p class="text-[11px] text-gray-400 font-semibold">Anlık Mağaza Hareketleri</p>
+            </div>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+        </div>
+
+        <div id="purchases-feed-list" class="space-y-3 flex-1 flex flex-col justify-start">
+          {% if purchases_data.size > 0 %}
+            {% for purchase in purchases_data limit: 3 %}
+              <div
+                class="flex items-center gap-3.5 p-3 rounded-2xl border transition-all duration-300 hover:scale-[1.01]"
+                style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.06);"
+                onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.4)';"
+                onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.06)';"
+              >
+                <div class="relative w-11 h-11 rounded-xl overflow-hidden border flex-shrink-0" style="border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);">
+                  <img src="https://mc-heads.net/avatar/{{ purchase.username }}/44" alt="{{ purchase.username }}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-bold text-xs text-white truncate" style="color: #ffffff !important;">{{ purchase.username }}</div>
+                  <div class="text-[11px] font-semibold truncate text-purple-300">{{ purchase.productName }}</div>
+                </div>
+                <div class="text-right flex-shrink-0">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-black text-white shadow-sm" style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.3); border: 1px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);">
+                    ₺{{ purchase.amount }}
+                  </span>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="flex-1 flex flex-col items-center justify-center p-6 text-center rounded-2xl border border-dashed"
+                 style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+              <h4 class="text-xs font-bold text-white mb-1">Henüz Satın Alım Yok</h4>
+              <p class="text-[11px] text-gray-400">Mağazamızdaki özel ürünleri ilk siz keşfedin.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- SAĞ (5 Cols): Mağaza Tanıtım Yazısı -->
+      <div
+        class="lg:col-span-5 rounded-3xl p-6 sm:p-8 border-2 shadow-2xl flex flex-col justify-between relative overflow-hidden backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(35, 20, 50, 0.95) 0%, rgba(18, 10, 26, 0.95) 100%);
+          border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);
+        "
+      >
+        <div class="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl opacity-30 pointer-events-none"
+             style="background: var(--color-primary);"></div>
+
+        <div class="relative z-10 space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider border"
+               style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.2); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.4); color: var(--color-primary);">
+            <span>VIP & ÖZEL ÜRÜNLER</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-black text-white leading-tight" style="color: #ffffff !important;">
+            Oyun Deneyiminizi Üst Seviyeye Taşıyın
+          </h3>
+
+          <p class="text-xs sm:text-sm font-medium leading-relaxed" style="color: #cbd5e1;">
+            Mağazamızda yer alan VIP üyelikler, kozmetikler ve özel kitler ile sunucuda ayrıcalıklı bir konuma gelin ve fark yaratın.
+          </p>
+
+          <div class="flex items-center gap-4 text-xs font-bold text-gray-300 pt-1">
+            <div class="flex items-center gap-1 text-emerald-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              <span>Anında Teslimat</span>
+            </div>
+            <div class="flex items-center gap-1 text-purple-300">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              <span>Güvenli Ödeme</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-6 relative z-10">
+          <a
+            href="/store"
+            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-105"
+            style="background: linear-gradient(135deg, var(--color-primary), #9333ea);"
+          >
+            <span>Mağazayı Keşfet</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ROW 2: SOLDA DESTEK TANITIMI | SAĞDA SON KREDİ YÜKLEYENLER ================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <!-- SOL (5 Cols): Sunucu Destek & Kredi Tanıtımı -->
+      <div
+        class="lg:col-span-5 rounded-3xl p-6 sm:p-8 border-2 shadow-2xl flex flex-col justify-between relative overflow-hidden backdrop-blur-xl"
+        style="
+          background: linear-gradient(135deg, rgba(16, 40, 30, 0.95) 0%, rgba(10, 24, 18, 0.95) 100%);
+          border-color: rgba(16, 185, 129, 0.35);
+        "
+      >
+        <div class="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-3xl opacity-30 pointer-events-none"
+             style="background: #10b981;"></div>
+
+        <div class="relative z-10 space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider border"
+               style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #10b981;">
+            <span>SUNUCU DESTEĞİ</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-black text-white leading-tight" style="color: #ffffff !important;">
+            Kredi Yükle, Bonusları ve Hediyeleri Yakala
+          </h3>
+
+          <p class="text-xs sm:text-sm font-medium leading-relaxed" style="color: #cbd5e1;">
+            Yüklediğiniz her kredi sunucumuzun gelişimine doğrudan destek sağlar ve size özel ekstra bonus krediler kazandırır.
+          </p>
+
+          <div class="flex items-center gap-4 text-xs font-bold text-gray-300 pt-1">
+            <div class="flex items-center gap-1 text-emerald-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span>%20 Bonus Kredi</span>
+            </div>
+            <div class="flex items-center gap-1 text-teal-300">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>7/24 Aktif Destek</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-6 relative z-10">
+          <a
+            href="/wallet"
+            class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-105"
+            style="background: linear-gradient(135deg, #059669, #10b981);"
+          >
+            <span>Kredi Yükle</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- SAĞ (7 Cols): Kredi Yükleyenler -->
+      <div
+        class="lg:col-span-7 rounded-3xl p-6 sm:p-7 border-2 shadow-2xl flex flex-col relative overflow-hidden backdrop-blur-xl"
+        style="
+          background: linear-gradient(180deg, rgba(20, 32, 26, 0.92) 0%, rgba(12, 18, 16, 0.96) 100%);
+          border-color: rgba(16, 185, 129, 0.25);
+        "
+      >
+        <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent"></div>
+
+        <div class="flex items-center justify-between pb-4 mb-4 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+                 style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4);">
+              <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-black text-sm uppercase text-white tracking-wide" style="color: #ffffff !important;">Son Kredi Yüklemeleri</h3>
+              <p class="text-[11px] text-gray-400 font-semibold">En Son Destekçilerimiz</p>
+            </div>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        </div>
+
+        <div id="payments-feed-list" class="space-y-3 flex-1 flex flex-col justify-start">
+          {% if payments_data.size > 0 %}
+            {% for payment in payments_data limit: 3 %}
+              <div
+                class="flex items-center gap-3.5 p-3 rounded-2xl border transition-all duration-300 hover:scale-[1.01]"
+                style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.06);"
+                onmouseover="this.style.borderColor='rgba(16, 185, 129, 0.4)';"
+                onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.06)';"
+              >
+                <div class="relative w-11 h-11 rounded-xl overflow-hidden border flex-shrink-0" style="border-color: rgba(16, 185, 129, 0.35);">
+                  <img src="https://mc-heads.net/avatar/{{ payment.username }}/44" alt="{{ payment.username }}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-bold text-xs text-white truncate" style="color: #ffffff !important;">{{ payment.username }}</div>
+                  <div class="text-[11px] font-semibold text-emerald-400">Bakiye Yüklemesi</div>
+                </div>
+                <div class="text-right flex-shrink-0">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-black text-emerald-400 shadow-sm" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.35);">
+                    +{{ payment.amount }} ₺
+                  </span>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="flex-1 flex flex-col items-center justify-center p-6 text-center rounded-2xl border border-dashed"
+                 style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+              <h4 class="text-xs font-bold text-white mb-1">Henüz Kredi Yükleyen Yok</h4>
+              <p class="text-[11px] text-gray-400">İlk destekçimiz siz olun ve avantajları yakalayın.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ROW 3: UZUN ŞEKİLDE YENİ KATILANLAR SIRA SIRA ================= -->
+    <div
+      class="rounded-3xl p-6 sm:p-8 border-2 shadow-2xl relative overflow-hidden backdrop-blur-xl"
+      style="
+        background: linear-gradient(180deg, rgba(20, 24, 38, 0.92) 0%, rgba(12, 14, 24, 0.96) 100%);
+        border-color: rgba(56, 189, 248, 0.25);
+      "
+    >
+      <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent"></div>
+
+      <div class="flex items-center justify-between pb-4 mb-6 border-b" style="border-color: rgba(255, 255, 255, 0.08);">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+               style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4);">
+            <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-black text-sm uppercase text-white tracking-wide" style="color: #ffffff !important;">Yeni Katılan Oyuncular</h3>
+            <p class="text-[11px] text-gray-400 font-semibold">Aramıza Yeni Katılan Üyelerimiz</p>
+          </div>
+        </div>
+
+        <a
+          href="/auth/sign-up"
+          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-sky-300 hover:text-white border transition-all hover:scale-105"
+          style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35);"
+        >
+          <span>Sen de Katıl</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <!-- Uzun Sıra Sıra Yatay Izgara (6'lı Kartlar) -->
+      <div id="signups-feed-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+        {% if signups_data.size > 0 %}
+          {% for user in signups_data limit: 6 %}
+            <div
+              class="flex flex-col items-center text-center p-4 rounded-2xl border transition-all duration-300 hover:scale-105 hover:-translate-y-1 group"
+              style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.07);"
+              onmouseover="this.style.borderColor='rgba(56, 189, 248, 0.5)';"
+              onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.07)';"
+            >
+              <div class="relative w-14 h-14 rounded-2xl overflow-hidden border-2 mb-2.5 shadow-lg group-hover:scale-105 transition-transform"
+                   style="border-color: rgba(56, 189, 248, 0.35);">
+                <img src="https://mc-heads.net/avatar/{{ user.username }}/56" alt="{{ user.username }}" class="w-full h-full object-cover">
+              </div>
+              <h4 class="font-black text-xs text-white truncate w-full mb-1" style="color: #ffffff !important;">{{ user.username }}</h4>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold text-sky-300 border"
+                    style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
+                Yeni Üye
+              </span>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-span-full py-8 text-center rounded-2xl border border-dashed flex flex-col items-center justify-center gap-2"
+               style="background: rgba(14, 9, 20, 0.4); border-color: rgba(255, 255, 255, 0.08);">
+            <p class="text-xs text-gray-400">Henüz yeni kayıt bulunmuyor. İlk siz kayıt olun!</p>
+            <a href="/auth/sign-up" class="px-4 py-2 rounded-xl text-xs font-black text-white bg-sky-600 hover:bg-sky-500 transition-all">Hemen Kayıt Ol →</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       EPIC CALL TO ACTION (CTA) BÖLÜMÜ
+       ============================================================ -->
+  <div class="relative w-full mt-16 sm:mt-24">
+    <div
+      class="relative w-full rounded-3xl overflow-hidden border-2 shadow-2xl p-8 sm:p-12 md:p-16 text-center backdrop-blur-2xl"
+      style="
+        background: radial-gradient(circle at 50% 0%, rgba(45, 22, 65, 0.95) 0%, rgba(18, 10, 26, 0.98) 100%);
+        border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.40);
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 45px rgba(var(--color-primary-rgb, 124, 58, 237), 0.20);
+      "
+    >
+      <!-- Glowing Radial Ambient Spots -->
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full blur-3xl opacity-30 pointer-events-none" style="background: var(--color-primary);"></div>
+      <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-80"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border shadow-lg"
+             style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.25); border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.5); color: var(--color-primary);">
+          <span>⚔️ MACERAYA KATILMA ZAMANI</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight" style="color: #ffffff !important; text-shadow: 0 4px 25px rgba(0,0,0,0.6);">
+          Efsanelerin Arasına Katılmaya Hazır Mısın?
+        </h2>
+
+        <p class="text-sm sm:text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto" style="color: #cbd5e1 !important;">
+          Binlerce aktif oyuncu, kesintisiz etkinlikler ve rekabet dolu dünyamızda seni bekliyoruz. Sunucu adresini kopyala veya hemen kayıt olarak aramıza katıl!
+        </p>
+
+        <!-- CTA Butonları -->
+        <div class="flex flex-wrap items-center justify-center gap-4 pt-6">
+          <!-- IP Kopyalama Butonu -->
+          <button
+            onclick="copyIp('{{ settings.server_ip | default: 'mc.hypixel.net' }}')"
+            class="relative group flex items-center gap-3.5 px-6 py-3.5 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:border-primary cursor-pointer shadow-2xl backdrop-blur-xl h-16"
+            style="
+              background: linear-gradient(135deg, rgba(32, 16, 48, 0.95), rgba(18, 10, 26, 0.95));
+              border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+            "
+          >
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20 text-primary border border-primary/40 group-hover:scale-110 transition-transform shadow-md flex-shrink-0">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="text-[10px] font-black uppercase tracking-wider text-purple-300">SUNUCU ADRESİ (KOPYALA)</span>
+              <span class="text-sm sm:text-base font-black text-white tracking-wide group-hover:text-primary transition-colors font-mono" style="color: #ffffff !important;">{{ settings.server_ip | default: 'mc.hypixel.net' }}</span>
+            </div>
+            <div class="ml-1 p-1.5 rounded-lg bg-white/5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+          </button>
+
+          <!-- Discord Butonu -->
+          <a
+            href="{{ settings.discord_url | default: '#' }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="relative group flex items-center gap-3.5 px-6 py-3.5 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:border-[#5865F2] cursor-pointer shadow-2xl backdrop-blur-xl h-16"
+            style="
+              background: linear-gradient(135deg, rgba(24, 28, 56, 0.95), rgba(14, 16, 32, 0.95));
+              border-color: rgba(88, 101, 242, 0.45);
+            "
+          >
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#5865F2]/20 text-[#5865F2] border border-[#5865F2]/40 group-hover:scale-110 transition-transform shadow-md flex-shrink-0">
+              <i class="fa-brands fa-discord text-xl"></i>
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="text-[10px] font-black uppercase tracking-wider text-indigo-300">TOPLULUĞA KATIL</span>
+              <span class="text-sm sm:text-base font-black text-white tracking-wide group-hover:text-[#5865F2] transition-colors" style="color: #ffffff !important;">Discord Sunucumuz</span>
+            </div>
+          </a>
+
+          <!-- Kayıt / Mağaza Butonu -->
+          <a
+            href="/auth/sign-up"
+            class="relative group flex items-center gap-3 px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base uppercase tracking-wider text-white shadow-2xl transition-all duration-300 hover:scale-105 border border-white/25 cursor-pointer h-16"
+            style="
+              background: linear-gradient(135deg, var(--color-primary), #9333ea);
+              box-shadow: 0 12px 30px rgba(var(--color-primary-rgb, 124, 58, 237), 0.45);
+            "
+          >
+            <span>Hemen Kayıt Ol</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Asynchronous feed synchronization if needed
+    async function syncCommunityFeed() {
+      try {
+        const res = await fetch('/api/storefront/v2/statistics');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data || !data.data) return;
+        // Feeds can be dynamically enhanced here
+      } catch(e) {}
+    }
+  </script>
+
+  <script>
+    // Live Statistics Fetcher for 3-Column Community Stream
+    (function fetchLiveCommunityStreams() {
+      async function loadStats() {
+        try {
+          const endpoints = [
+            '/api/storefront/v2/statistics',
+            '/api/website/v2/statistics',
+            '/api/statistics'
+          ];
+          let data = null;
+          for (const ep of endpoints) {
+            try {
+              const res = await fetch(ep);
+              if (res.ok) {
+                const json = await res.json();
+                data = json.data || json;
+                if (data && (data.latest || data.payments || data.purchases || data.signups)) break;
+              }
+            } catch(e) {}
+          }
+
+          if (!data) return;
+
+          const latest = data.latest || data;
+          const payments = latest.payments || [];
+          const purchases = latest.purchases || [];
+          const signups = latest.signups || [];
+
+          // 1. Update Purchases Column
+          if (purchases.length > 0) {
+            const listEl = document.getElementById('purchases-feed-list');
+            if (listEl) {
+              listEl.innerHTML = purchases.slice(0, 4).map(p => `
+                <div class="flex items-center gap-3.5 p-3 rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+                     style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.06);"
+                     onmouseover="this.style.borderColor='rgba(var(--color-primary-rgb, 124, 58, 237), 0.4)';"
+                     onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.06)';">
+                  <div class="relative w-11 h-11 rounded-xl overflow-hidden border flex-shrink-0" style="border-color: rgba(var(--color-primary-rgb, 124, 58, 237), 0.35);">
+                    <img src="https://mc-heads.net/avatar/${p.username}/44" alt="${p.username}" class="w-full h-full object-cover">
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-bold text-xs text-white truncate">${p.username}</div>
+                    <div class="text-[11px] font-semibold truncate text-purple-300">${p.productName || 'Mağaza Ürünü'}</div>
+                  </div>
+                  <div class="text-right flex-shrink-0">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-black text-white shadow-sm" style="background: rgba(var(--color-primary-rgb, 124, 58, 237), 0.3); border: 1px solid rgba(var(--color-primary-rgb, 124, 58, 237), 0.4);">
+                      ₺${p.amount}
+                    </span>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+
+          // 2. Update Payments Column
+          if (payments.length > 0) {
+            const listEl = document.getElementById('payments-feed-list');
+            if (listEl) {
+              listEl.innerHTML = payments.slice(0, 4).map(p => `
+                <div class="flex items-center gap-3.5 p-3 rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+                     style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.06);"
+                     onmouseover="this.style.borderColor='rgba(16, 185, 129, 0.4)';"
+                     onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.06)';">
+                  <div class="relative w-11 h-11 rounded-xl overflow-hidden border flex-shrink-0" style="border-color: rgba(16, 185, 129, 0.35);">
+                    <img src="https://mc-heads.net/avatar/${p.username}/44" alt="${p.username}" class="w-full h-full object-cover">
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-bold text-xs text-white truncate">${p.username}</div>
+                    <div class="text-[11px] font-semibold text-emerald-400">Bakiye Yüklemesi</div>
+                  </div>
+                  <div class="text-right flex-shrink-0">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-black text-emerald-400 shadow-sm" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.35);">
+                      +${p.amount} ₺
+                    </span>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+
+          // 3. Update Signups Row (6-Grid)
+          if (signups.length > 0) {
+            const listEl = document.getElementById('signups-feed-list');
+            if (listEl) {
+              listEl.innerHTML = signups.slice(0, 6).map(u => `
+                <div class="flex flex-col items-center text-center p-4 rounded-2xl border transition-all duration-300 hover:scale-105 hover:-translate-y-1 group"
+                     style="background: rgba(14, 9, 20, 0.7); border-color: rgba(255, 255, 255, 0.07);"
+                     onmouseover="this.style.borderColor='rgba(56, 189, 248, 0.5)';"
+                     onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.07)';">
+                  <div class="relative w-14 h-14 rounded-2xl overflow-hidden border-2 mb-2.5 shadow-lg group-hover:scale-105 transition-transform"
+                       style="border-color: rgba(56, 189, 248, 0.35);">
+                    <img src="https://mc-heads.net/avatar/${u.username}/56" alt="${u.username}" class="w-full h-full object-cover">
+                  </div>
+                  <h4 class="font-black text-xs text-white truncate w-full mb-1" style="color: #ffffff !important;">${u.username}</h4>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold text-sky-300 border"
+                        style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
+                    Yeni Üye
+                  </span>
+                </div>
+              `).join('');
+            }
+          }
+        } catch(err) {
+          console.warn('Live community stream error:', err);
+        }
+      }
+      loadStats();
+    })();
+  </script>
